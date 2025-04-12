@@ -30,9 +30,9 @@ img {
 }
 
 h2 {
-    color: #ff5733; /* Use your desired color */
+   /* color: #ff5733; /* Use your desired color */
     font-weight: bold;
-    font-family: 'poppins', sans-serif;
+   /* font-family: 'poppins', sans-serif;*/
 }
 
 h1 {
@@ -42,11 +42,87 @@ h1 {
     font-family: 'poppins', sans-serif;
     font-weight: 600;
 }
+
+/*#animated-text {
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* Adds spacing between words */
+   /* font-size: 24px;
+    font-weight: bold;
+    margin-top: 20px;
+    color: inherit;
+    text-align: center;
+    overflow: visible;
+    height: auto;
+    width: 100%;
+}*/
+
+#animated-text {
+    width: 100%; /* Full width */
+    text-align: center; /* Center the text */
+    font-size: 1.5rem; /* Adjust text size */
+    font-weight: bold;
+    margin-top: 20px;
+    color: #000; /* Default text color */
+    opacity: 1; /* Fully visible by default */
+}
+
+.animated-word {
+    display: inline-block; /* Keep the words inline */
+    margin: 5px;
+    white-space: nowrap; /* Prevent text wrapping */
+}
+
+/*span {
+     background: linear-gradient(45deg, #ff5733, #c70039);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+     white-space: nowrap;
+     margin: 5px;*/
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8); /* Start slightly smaller */
+    }
+    to {
+        opacity: 1;
+        transform: scale(1); /* Grow to original size */
+    }
+}
+
 footer {
     text-align: center;
     padding: 10px;
     background-color: #333;
     color: #fff;
+}
+
+#logo {
+    width: 200px; /* Adjust as needed */
+    animation: rotateAndZoom 4s infinite, fadeInOut 4s infinite; /* Combine animations */
+}
+
+@keyframes rotateAndZoom {
+    0% {
+        transform: rotate(0deg) scale(1); /* Original size and start rotation */
+    }
+    50% {
+        transform: rotate(180deg) scale(1.2); /* Rotate halfway and zoom in */
+    }
+    100% {
+        transform: rotate(360deg) scale(1); /* Complete rotation and reset size */
+    }
+}
+
+@keyframes fadeInOut {
+    0%, 100% {
+        opacity: 0; /* Fully transparent */
+    }
+    50% {
+        opacity: 1; /* Fully visible */
+    }
 }
 
 main {
