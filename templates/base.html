@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Youth Connect{% endblock %}</title>
     {% load static %}
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
 </head>
 <body>
@@ -12,10 +13,10 @@
     <nav>
         <ul>
             <li><a href="/">Home</a></li>
-            <li><a href="/about/">About Us</a></li>
             <li><a href="/leaders/">Leaders</a></li>
             <li><a href="/resources/">Resources</a></li>
             <li><a href="/news_events/">News & Events</a></li>
+            <li><a href="/about/">About Us</a></li>
             <li><a href="/join/">Join Us</a></li>
             <li><a href="/contact/">Contact Us</a></li>
         </ul>
@@ -23,9 +24,9 @@
 
     <!-- Hero Section -->
     <header>
-        <img src="{% static 'images/hero.jpg' %}" alt="Youth Connect Hero Banner" style="width:100%; height:auto;">
+        <img src="{% static 'images/group2.jpg' %}" alt="Youth Connect Hero Banner" style="width:100%; height:auto;">
         <h1>Welcome to Youth Connect</h1>
-        <p>Empowering youth for a brighter future.</p>
+        <p>Empowering youth for a brighter future.<strong>united we stand, divided we fall</strong></p>
     </header>
 
     <!-- Main Content Area -->
@@ -38,7 +39,7 @@
     <!-- Footer Section -->
     <footer>
         <p>© 2025 Youth Connect. All rights reserved.</p>
-        <img src="{% static 'images/footer-logo.jpg' %}" alt="Youth Connect Logo" style="height:50px; width:auto;">
+        <img src="{% static 'images/youth-connect.png' %}" alt="Youth Connect Logo" style="height:50px; width:auto;">
     </footer>
 </body>
 </html>
