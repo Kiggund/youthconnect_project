@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Youth Connect{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/about/">About Us</a></li>
+            <li><a href="/leaders/">Leaders</a></li>
+            <li><a href="/resources/">Resources</a></li>
+            <li><a href="/news_events/">News & Events</a></li>
+            <li><a href="/join/">Join Us</a></li>
+            <li><a href="/contact/">Contact Us</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <header>
+        <img src="{% static 'images/hero.jpg' %}" alt="Youth Connect Hero Banner" style="width:100%; height:auto;">
+        <h1>Welcome to Youth Connect</h1>
+        <p>Empowering youth for a brighter future.</p>
+    </header>
+
+    <!-- Main Content Area -->
+    <main>
+        {% block content %}
+        <!-- Content specific to each page will go here -->
+        {% endblock %}
+    </main>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>© 2025 Youth Connect. All rights reserved.</p>
+        <img src="{% static 'images/footer-logo.jpg' %}" alt="Youth Connect Logo" style="height:50px; width:auto;">
+    </footer>
+</body>
+</html>

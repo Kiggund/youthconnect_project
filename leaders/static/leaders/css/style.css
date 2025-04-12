@@ -1,0 +1,66 @@
+/* General body styling */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #e0f7fa;
+}
+
+/* Header styles */
+h1 {
+    text-align: center;
+    font-family: 'Georgia',serif;
+    color: #00796b;
+    margin: 20px 0;
+}
+
+/* Leader cards */
+ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 10px;
+    padding: 20px;
+    max-width: 300px;
+    text-align: center;
+}
+
+img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-bottom: 15px;
+}
+
+h2 {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+    color: #1f3c88;
+}
+
+p {
+    font-size: 0.9em;
+    color: #555;
+    margin: 5px 0;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    li {
+        max-width: 100%;
+    }
+
+    img {
+        width: 80px;
+        height: 80px;
+    }
+}

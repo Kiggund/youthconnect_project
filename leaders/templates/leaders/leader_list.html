@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Leaders{% endblock %}
+
+{% block content %}
+    <h1>Meet Our Leaders</h1>
+    <ul>
+        {% for leader in leaders %}
+            <li>
+                {% if leader.image %}
+                    <img src="{{ leader.image.url }}" alt="{{ leader.name }}" style="width:150px;height:150px;border-radius:50%;">
+                {% endif %}
+                <h2>{{ leader.name }}</h2>
+                <p><strong>Position:</strong> {{ leader.position }}</p>
+                <p><strong>Bio:</strong> {{ leader.bio }}</p>
+                <p><strong>Values:</strong> {{ leader.values }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
