@@ -98,11 +98,14 @@ footer {
     font-weight: bold;
     color: #fff;
     margin-top: 10px;
-    width: 29ch; /* Adjust width based on text length */
+    width: 27ch; /* Adjust width based on text length */
     white-space: nowrap;
     overflow: hidden;
-    border-right: 2px solid #333;
-    animation: typing 4s steps(20, end), blink 1s step-end infinite alternate;
+    border-right: 2px solid #fff;
+    /*animation: typing 4s steps(25, end), blink 0.5s step-end infinite alternate, fadeOut 8s 4s infinite; /* Combine typing, blinking, and fading */
+    /*animation-timing-function: steps(25); /* Adjust typing smoothness */
+   /* animation: typing 4s steps(25, end), erase 4s 4s infinite; /* Typing and erasing loop */
+    animation: typing 4s steps(25, end), eraseTypeLoop 8s infinite; /* Combine typing and erasing in a loop */
 }
 @keyframes shadowPulse {
     0%, 100% {
@@ -148,7 +151,52 @@ footer {
         width: 0;
     }
     to {
-        width: 29ch;
+        width: 27ch;
+    }
+}
+
+/* Erasing Effect */
+/*@keyframes erase {
+    from {
+        width: 25ch; /* Start with full text visible */
+    }
+  /*  to {
+        width: 0; /* End with no text visible */
+    }
+}
+
+/* Combined Erase and Restart Typing */
+@keyframes eraseTypeLoop {
+    0%, 50% {
+        width: 25ch; /* Full text visible during typing */
+        opacity: 1; /* Fully visible while typing */
+    }
+    75% {
+        width: 0; /* Begin erasing */
+        opacity: 1; /* Remain visible while erasing */
+    }
+    100% {
+        width: 0; /* Text fully erased */
+        opacity: 0; /* Faded out completely */
+    }
+}
+/* Fading Effect */
+@keyframes fadeOut {
+    50%, 100%*/ {
+       opacity: 0; /* Fully transparent */
+    }
+    0%, 25% {
+       opacity: 1; /* Fully visible */
+    }
+}
+
+/* Blinking Cursor Effect */
+@keyframes blink {
+    from {
+        border-color: transparent;
+    }
+    to {
+        border-color: #fff; /* Simulate a blinking cursor */
     }
 }
 
