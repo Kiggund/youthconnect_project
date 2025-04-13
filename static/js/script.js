@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const words = ["Welcome", "to", "Youth Connect"]; // Words to animate
+    const words = ["Welcome", "to", "Youth", "Connect"]; // Words to animate
     const container = document.getElementById("animated-text"); // Target container
 
     let index = 0; // Current word index
@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     index = 0; // Reset word index
                     displayWord(); // Restart animation
                 }, 2000); // Delay for fade-out duration
-            }, 1500); // Wait after the last word
+            }, 3000); // Wait after the last word
         }
     }
 

@@ -2,7 +2,7 @@ body {
     font-family: 'Roboto', sans-serif;
     margin: 0;
     padding: 0;
-   /*background-color: #f4f4f9;*/
+    background-color: #f4f4f9;
     background: linear-gradient(135deg, #f3f4f6, #d6e0f5);
 }
 
@@ -43,20 +43,6 @@ h1 {
     font-weight: 600;
 }
 
-/*#animated-text {
-    display: flex;
-    justify-content: center;
-    gap: 10px; /* Adds spacing between words */
-   /* font-size: 24px;
-    font-weight: bold;
-    margin-top: 20px;
-    color: inherit;
-    text-align: center;
-    overflow: visible;
-    height: auto;
-    width: 100%;
-}*/
-
 #animated-text {
     width: 100%; /* Full width */
     text-align: center; /* Center the text */
@@ -71,14 +57,6 @@ h1 {
     display: inline-block; /* Keep the words inline */
     margin: 5px;
     white-space: nowrap; /* Prevent text wrapping */
-}
-
-/*span {
-     background: linear-gradient(45deg, #ff5733, #c70039);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-     white-space: nowrap;
-     margin: 5px;*/
 }
 
 @keyframes fadeIn {
@@ -99,12 +77,43 @@ footer {
     color: #fff;
 }
 
-#logo {
-    width: 200px; /* Adjust as needed */
-    animation: rotateAndZoom 4s infinite, fadeInOut 4s infinite; /* Combine animations */
+#logo-container {
+   display: relative;
+   align-items: center;
+  /* height: 100px;
+   width: 100px;*/
+   animation: glowing 2s infinite alternate;
+   box-shadow: 15px rgba(255, 165, 0, 0.7), 0 0 30px rgba(255, 69, 0, 0.7); /* Glow effect */
+   border-radius: 10%;
 }
 
-@keyframes rotateAndZoom {
+#logo {
+    width: 200px; /* Adjust as needed */
+    animation: rotateAndScale 4s infinite, colorChange 5s infinite, colorChange 5s infinite; /*Combined animations*/
+    box-shadow: 0 0 10px rgba(255, 165, 0, 0.5);
+}
+
+#logo-text {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #fff;
+    margin-top: 10px;
+    width: 29ch; /* Adjust width based on text length */
+    white-space: nowrap;
+    overflow: hidden;
+    border-right: 2px solid #333;
+    animation: typing 4s steps(20, end), blink 1s step-end infinite alternate;
+}
+@keyframes shadowPulse {
+    0%, 100% {
+        box-shadow: 10px rgba(255, 165, 0, 0.5);
+    }
+    50% {
+        box-shadow: 30px rgba(255, 69, 0, 1);
+    }
+}
+
+@keyframes rotateAndScale {
     0% {
         transform: rotate(0deg) scale(1); /* Original size and start rotation */
     }
@@ -122,6 +131,34 @@ footer {
     }
     50% {
         opacity: 1; /* Fully visible */
+    }
+}
+
+@keyframes glowing {
+    0% {
+        box-shadow: 20px rgba(255, 165, 0, 0.7), 0 0 40px rgba(255, 69, 0, 0.7);
+    }
+    100% {
+        box-shadow: 40px rgba(255, 165, 0, 1), 0 0 60px rgba(255, 69, 0, 1);
+    }
+}
+
+@keyframes typing {
+    from {
+        width: 0;
+    }
+    to {
+        width: 29ch;
+    }
+}
+
+/* Keyframes for color change */
+@keyframes colorChange {
+    0% {
+        filter: hue-rotate(0deg);
+    }
+    100% {
+        filter: hue-rotate(360deg);
     }
 }
 
