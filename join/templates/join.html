@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block extra_styles %}
+<link href="{% static 'css/join.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block title %}Join{% endblock %}
+
+{% block content %}
+<h1>Join Us</h1>
+<p>Welcome to the join page! Please fill out the form below to get started:</p>
+
+<form action="/join/" method="post">
+    {% csrf_token %}
+    <label for="name">Name:</label><br>
+    <input type="text" id="name" name="name"><br><br>
+    <label for="email">Email:</label><br>
+    <input type="email" id="email" name="email"><br><br>
+    <input type="submit" value="Join">
+</form>
+{% endblock %}

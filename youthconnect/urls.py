@@ -20,6 +20,12 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('leaders/', include('leaders.urls')),  # Include app-specific URLs
+    path('homepage/', include('homepage.urls')),
+    path('news_events/', include('news_events.urls')),
+    path('resources/', include('resources.urls')),
+    path('about/', include('about.urls')),
+    path('join/', include('join.urls')),
+    path('contact/', include('contact.urls')),
 ]
 
 from django.conf import settings

@@ -1,0 +1,109 @@
+/* General Styling */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+}
+
+/* Hero Section */
+.hero {
+    background: linear-gradient(to right, #4CAF50, #8BC34A);
+    color: white;
+    padding: 50px 0;
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+.hero p {
+    font-size: 1.5rem;
+    margin-top: 15px;
+}
+
+.hero button {
+    margin: 20px 10px;
+    padding: 15px 30px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    color: #4CAF50;
+    background: white;
+}
+
+.hero .btn-primary:hover {
+    background: #f0f0f0;
+}
+
+.hero .btn-secondary {
+    color: white;
+    background: #8BC34A;
+}
+
+.hero .btn-secondary:hover {
+    background: #76B947;
+}
+
+/* Mission Section */
+.mission {
+    padding: 50px;
+    background-color: #f9f9f9;
+    text-align: center;
+}
+
+.mission h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+
+.mission p {
+    font-size: 1.2rem;
+    margin: 20px 0;
+    color: red;
+}
+
+.mission ul {
+    list-style: none;
+    padding: 0;
+}
+
+.mission ul li {
+    font-size: 1.2rem;
+    margin: 10px 0;
+}
+
+/* Vision Section */
+.vision {
+    padding: 50px;
+    background-color: #ffffff;
+    text-align: center;
+}
+
+.vision h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+
+.vision p {
+    font-size: 1.2rem;
+    margin: 20px 0;
+}
+
+.vision ul {
+    list-style: none;
+    padding: 0;
+}
+
+.vision ul li {
+    font-size: 1.2rem;
+    margin: 10px 0;
+}

@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block extra_styles %}
+<link rel="stylesheet" href="{% static 'css/homepage.css' %}">
+{% endblock %}
+
+{% block title %}Welcome to YouthConnect{% endblock %}
+
+{% block content %}
+<!-- Hero Banner Section -->
+<section class="hero">
+    <div class="hero-content">
+        <h1>United We Stand, Divided We Fall</h1>
+        <p>Empowering Youth | Building Wealth | Achieving Greatness</p>
+        <button class="btn-primary">Join the Movement</button>
+        <button class="btn-secondary">Learn More</button>
+    </div>
+</section>
+
+<!-- Mission Statement Section -->
+<section class="mission">
+    <div class="mission-content">
+        <h2>Our Mission: Empowerment Through Unity</h2>
+        <p>
+            At our core, we believe in the transformative power of financial literacy and investment management. Our mission is to:
+        </p>
+        <ul>
+            <li>Cultivate a <strong>culture of savings and investment</strong> among the youth for <strong>collective economic empowerment</strong>.</li>
+            <li>Champion <strong>businesses driven by unwavering leadership</strong> and a vision for lasting success.</li>
+        </ul>
+        <p>
+            Together, we are rising as one, creating wealth, achieving greatness, and empowering each member of our team to thrive.
+        </p>
+    </div>
+</section>
+
+<!-- Vision Statement Section -->
+<section class="vision">
+    <div class="vision-content">
+        <h2>Our Vision: A Sustainable Tomorrow</h2>
+        <p>
+            We envision a future built on collaboration and strategic planning. By investing in businesses with strong leadership, we:
+        </p>
+        <ul>
+            <li>Ensure <strong>long-term growth</strong>.</li>
+            <li>Empower our team to achieve <strong>financial success</strong>.</li>
+            <li>Build a legacy of greatness that inspires generations.</li>
+        </ul>
+        <p>
+            Let us transform aspirations into achievements, uniting our efforts to create a better future for everyone.
+        </p>
+    </div>
+</section>
+{% endblock %}
