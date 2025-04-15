@@ -2,7 +2,7 @@
 
 {% load static %}
 
-{% block extra_styles %}
+{% block styles %}
 <link rel="stylesheet" href="{% static 'css/homepage.css' %}">
 {% endblock %}
 
@@ -12,13 +12,12 @@
 <!-- Hero Banner Section -->
 <section class="hero">
     <div class="hero-content">
-        <h1>United We Stand, Divided We Fall</h1>
+        <h1>United We Stand, Divided We Fall!</h1>
         <p>Empowering Youth | Building Wealth | Achieving Greatness</p>
-        <button class="btn-primary">Join the Movement</button>
+        <a href="/join/" class="btn-primary">Join Movement</a>
         <button class="btn-secondary">Learn More</button>
     </div>
 </section>
-
 <!-- Mission Statement Section -->
 <section class="mission">
     <div class="mission-content">
@@ -34,6 +33,34 @@
             Together, we are rising as one, creating wealth, achieving greatness, and empowering each member of our team to thrive.
         </p>
     </div>
+    <div class="infographic">
+   <!-- <div class="icon-box">
+        <i class="fas fa-piggy-bank"></i>
+        <p>Savings</p>
+    </div>
+    <div class="icon-box">
+        <i class="fas fa-chart-line"></i>
+        <p>Investment Growth</p>
+    </div>
+    <div class="icon-box">
+        <i class="fas fa-handshake"></i>
+        <p>Community Unity</p>
+    </div> -->
+    <div class="visual-box">
+    <img src="{% static 'images/savings.jpg' %}" alt="Savings">
+    <p>Savings</p>
+</div>
+
+<div class="visual-box">
+    <img src="{% static 'images/investment.jpg' %}" alt="Investment Growth">
+    <p>Investment Growth</p>
+</div>
+
+<div class="visual-box">
+    <img src="{% static 'images/unity.jpg' %}" alt="Community Unity">
+    <p>Community Unity</p>
+</div>
+  </div>
 </section>
 
 <!-- Vision Statement Section -->
