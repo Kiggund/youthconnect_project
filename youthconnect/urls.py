@@ -24,7 +24,7 @@ urlpatterns = [
     path('news_events/', include('news_events.urls')),
     path('resources/', include('resources.urls')),
     path('about/', include('about.urls')),
-    path('join/', include('join.urls')),
+    path('join/', include('join.urls', namespace='join')),
     path('contact/', include('contact.urls')),
 ]
 

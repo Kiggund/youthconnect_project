@@ -212,32 +212,19 @@ p {
 /* vision section */
 
 .vision {
-    display: relative;
+    display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    background: red; /* Only for testing! */
+    background: blue !important; /* Only for testing! */
     padding: 50px 5%;
-/*    background-color: #f5f5f5 ! important;*/
+    background-color: #f5f5f5 ! important;
 }
+
 .vision h2 {
     font-size: 2.5rem;
     font-weight: bold;
     color: #4CAF50; /* Green theme */
     text-transform: uppercase;
     margin-bottom: 20px;
-}
-.vision {
-    background: url('/static/images/unity.jpg') no-repeat center;
-    background-size: cover;
-    color: black;
-    padding: 60px 5%;
-    background-position: center;
-}
-.vision {
-    height: 500px; /* Adjust height */
-    display: flex;
-    align-items: center; /* Centers content */
-    justify-content: center;
-    padding: 40px 5%;
 }
