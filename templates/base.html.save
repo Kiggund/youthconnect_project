@@ -19,7 +19,7 @@
         <div class="hamburger" onclick="toggleMenu()">☰</div>
         <ul class="nav-links" id="navlinks">
             <li><a href="/homepage/">Home</a></li>
-            <li><a href="/leaders/">Leaders</a></li>
+            <li><a #href="/leaders/">Leaders</a></li>
             <li><a href="/resources/">Resources</a></li>
             <li><a href="/news_events/">News & Events</a></li>
             <li><a href="/about/">About Us</a></li>
