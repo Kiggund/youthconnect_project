@@ -8,6 +8,47 @@
 {% block title %}news_events{% endblock %}
 
 {% block content %}
-<h1>Welcome to YouthConnect!</h1>
 <p>This is the news & events content.</p>
+
+<section class="news-events">
+    <h2>News & Events</h2>
+    <p class="subtitle">Stay updated with our latest initiatives and opportunities.</p>
+    
+    <div class="event-grid">
+        <!-- Event 1 -->
+        <div class="event-card">
+            <img src="{% static 'images/investment.jpg' %}" alt="Financial Workshop">
+            <div class="event-details">
+                <span class="date">June 15, 2025</span>
+                <h3>Financial Literacy Workshop</h3>
+                <p>Learn budgeting, investing, and wealth-building strategies tailored for young adults.</p>
+                <a href="#" class="btn">Register Now</a>
+            </div>
+        </div>
+      <!--  <div class="event-grid">
+    {% for event in events %}
+    <div class="event-card">
+        <img src="{{ event.image.url }}" alt="{{ event.title }}">
+        <div class="event-details">
+            <span class="date">{{ event.date|date:"F j, Y" }}</span>
+            <h3>{{ event.title }}</h3>
+            <p>{{ event.description }}</p>
+            <a href="{{ event.link }}" class="btn">Register</a>
+        </div>
+    </div>
+    {% endfor %}
+</div> -->
+        
+        <!-- Event 2 -->
+        <div class="event-card">
+            <img src="{% static 'images/investment.jpg' %}" alt="Youth Summit">
+            <div class="event-details">
+                <span class="date">July 22, 2025</span>
+                <h3>Youth Leadership Summit</h3>
+                <p>Network with mentors and peers to amplify your impact in your community.</p>
+                <a href="#" class="btn">Learn More</a>
+            </div>
+        </div>
+    </div>
+</section>
 {% endblock %}

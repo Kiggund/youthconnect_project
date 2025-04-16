@@ -21,6 +21,8 @@ p {
     color: white;
     padding: 50px 0;
     text-align: center;
+    width: 100%;
+    max-width: 100%;
 }
 
 .hero h1 {
@@ -122,35 +124,17 @@ p {
     padding: 30px;
 }
 
-/*.icon-box {
-    flex: 1 1 150px; /* Allows resizing while maintaining proportions */
-  /*  text-align: center;
-    padding: 15px;
-    min-width: 100px; /* Ensures icons don't shrink too much */
-    /*font-size: 3rem;
-    color: #4CAF50;
-    display: inline-block;
-    margin-bottom: 10px;
-}
-
-.icon-box i {
-    font-size: 2rem; /* Adjusted for smaller screens */
-}
-
-@media (max-width: 600px) {
+/*@media (max-width: 600px) {
     .infographic {
         flex-direction: column; /* Stacks items vertically on small screens */
-        align-items: center;
+       /* align-items: center;
     }
 
-  /*  .icon-box {
+    /*.icon-box {
         width: 90%; /* Makes boxes fit nicely */
     }
 }
 
-/*.icon-box:hover {
-    transform: scale(1.1); /* Enlarges on hover */
-}
 
 .visual-box {
     text-align: center;
