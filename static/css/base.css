@@ -6,6 +6,67 @@ body {
     background: linear-gradient(135deg, #f3f4f6, #d6e0f5);
 }
 
+/* Header Section */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Space out items horizontally */
+    padding: 10px 20px; /* Add space inside the header */
+    background-color: #f9f9f9; /* Light background color */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    position: fixed; /* Keep the header visible while scrolling */
+    width: 100%; /* Full width */
+    top: 0; /* Align to the top */
+    z-index: 1000; /* Ensure it stays above other elements */
+}
+
+/* Logo */
+.logo img {
+    width: 50px; /* Adjust logo size */
+    height: auto; /* Maintain aspect ratio */
+}
+
+/* Title */
+.title h1 {
+    font-size: 1.5rem;
+    color: #007bff; /* Bright blue for branding */
+    margin: 0;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* Hamburger Menu */
+/*.hamburger {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+/*.hamburger .bar {
+    width: 35px;
+    height: 5px;
+    background-color: #333;
+    margin: 6px 0;
+    transition: all 0.3s ease;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .title h1 {
+        font-size: 1rem; /* Adjust font size for smaller screens */
+    }
+ /*   .hamburger {
+        width: 50px;
+        height: 50px;
+    }
+    .hamburger .bar {
+        width: 30px; /* Adjust size for bars */
+    }
+}
+
 nav ul {
     list-style: none;
     padding: 0;
@@ -286,7 +347,7 @@ body {
     align-items: center;
     position: fixed; /* Positioned in the top corner */
     top: 10px; /* Add space from the top */
-    left: 10px; /* Add space from the left */
+    right: 10px; /* Add space from the left */
     cursor: pointer; /* Ensure it's clickable */
     z-index: 1000; /* Ensure it stays above other elements */
 }
