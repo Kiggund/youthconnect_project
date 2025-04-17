@@ -1,3 +1,216 @@
-.we p {
-  color: #fff;
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Heading Styles */
+h1, h2 {
+    color: #007bff;
+}
+
+h1 {
+    text-align: center;
+}
+
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Highlight Box */
+.highlight {
+    background-color: #f9f9f9;
+    border-left: 4px solid #007bff;
+    padding: 10px;
+    margin: 20px 0;
+}
+
+/* Call-to-Action Button */
+.cta {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-top: 20px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.cta:hover {
+    background-color: #0056b3;
+}
+
+/* List Styles */
+ul {
+    padding-left: 20px;
+}
+
+li {
+    margin-bottom: 10px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    body {
+        padding: 0 10px;
+    }
+    .container {
+        padding: 10px;
+    }
+    h1 {
+        font-size: 1.8rem;
+    }
+    h2 {
+        font-size: 1.4rem;
+    }
+    .highlight {
+        padding: 8px;
+        font-size: 0.95rem;
+    }
+    .cta {
+        display: block;
+        width: 100%; /* Full-width buttons for smaller screens */
+        text-align: center;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.5rem;
+    }
+    h2 {
+        font-size: 1.2rem;
+    }
+    p, li {
+        font-size: 0.9rem;
+    }
+    .cta {
+        font-size: 0.9rem;
+        padding: 8px;
+    }
+}
+
+/***** Core Values Section *****/
+.core-values {
+    padding: 20px;
+    background-color: #f9f9f9; /* Light background for contrast */
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    margin-top: 20px;
+}
+
+.core-values h2 {
+    color: #007bff; /* Highlighted heading color */
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 15px;
+}
+
+.core-values p {
+    font-size: 1.1rem;
+    color: #333;
+    text-align: justify;
+    margin-bottom: 15px;
+}
+
+.core-values ul {
+    list-style-type: disc;
+    padding-left: 20px;
+}
+
+.core-values li {
+    font-size: 1rem;
+    margin-bottom: 10px;
+}
+
+.core-values li strong {
+    color: #007bff;
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .core-values h2 {
+        font-size: 1.8rem;
+    }
+    .core-values p, .core-values li {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .core-values h2 {
+        font-size: 1.5rem;
+    }
+    .core-values p, .core-values li {
+        font-size: 0.9rem;
+    }
+}
+
+/***** Why Join Us Section *****/
+.why-join-us {
+    padding: 20px;
+    background-color: #f9f9f9; /* Light background for contrast */
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    margin-top: 20px;
+}
+
+.why-join-us h2 {
+    color: #007bff; /* Highlighted heading color */
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 15px;
+}
+
+.why-join-us p {
+    font-size: 1.1rem;
+    color: #333;
+    text-align: justify;
+    margin-bottom: 15px;
+}
+
+.why-join-us ul {
+    list-style-type: disc;
+    padding-left: 20px;
+}
+
+.why-join-us li {
+    font-size: 1rem;
+    margin-bottom: 10px;
+}
+
+.why-join-us li strong {
+    color: #007bff;
+}
+
+.why-join-us .cta {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-top: 15px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.why-join-us .cta:hover {
+    background-color: #0056b3; /* Darker blue on hover */
 }

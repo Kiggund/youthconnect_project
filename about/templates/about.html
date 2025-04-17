@@ -1,15 +1,89 @@
 {% extends 'base.html' %}
+
 {% load static %}
-{% block extra_styles %}
+
+{% block styles %}
 <link href="{% static 'css/about.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block title %}About{% endblock %}
 
 {% block content %}
-<h1>Welcome to YouthConnect about us</h1>
-<p>This is the about us  content.</p>
-<div id="who we are" class="we">
- <p>gshhjsbsjksbsbsksbsjbshdjshzvz</p>
-</div>
+<h1>Welcome to YouthConnect About Us</h1>
+<body>
+    <div class="container">
+        <section>
+            <h2>Introduction</h2>
+            <p>We, the members of the <strong>Youth Con-nect Group</strong>, believe that empowering the youth is key to building sustainable development. United by our mission, we promote financial literacy, encourage saving, and create investment opportunities. With a commitment to integrity, inclusiveness, and collaboration, we transform challenges into opportunities for young people.</p>
+        </section>
+        
+        <section>
+            <h2>Our History</h2>
+            <p><strong>Foundation:</strong></p>
+            <p>Founded in early 2021 by <strong>Wawumba Esuneri</strong>, the Youth Con-nect Group started as a small initiative with just 10 members, aimed at empowering the youth through financial literacy and investment management.</p>
+            <p><strong>Rebranding:</strong></p>
+            <p>Originally operating under a different name, the group rebranded to <strong>Youth Con-nect Group</strong>, a name proposed by <strong>Kawala Josephyne Fridah</strong>, who later became the Operational Director. The rebranding symbolized a new era of unity and opportunities for young people.</p>
+            <p><strong>Growth:</strong></p>
+            <p>From its beginnings as a small group focused on development initiatives, Youth Con-nect Group has expanded its scope to include a wide range of activities, fostering holistic youth empowerment.</p>
+        </section>
+        
+        <section>
+            <h2>Mission and Vision</h2>
+            <p><strong>Mission:</strong> To cultivate a culture of financial literacy, savings, and investment management, fostering collective economic empowerment among the youth.</p>
+            <p><strong>Vision:</strong> To build a unified and sustainable future by investing in businesses with strong leadership, promoting long-term growth, and empowering young people to achieve financial success through collaboration.</p>
+        </section>
+        
+        <section>
+            <h2>Leadership</h2>
+            <p>Our leadership is the backbone of our success. Led by a team of dedicated individuals, we are driven to achieve our goals and create lasting impact.</p>
+            <a href="/leaders/"class="cta">Meet Our Leadership Team</a>
+        </section>
+        
+        <section class="core-values">
+            <h2>Our Values</h2>
+            <p>At the <strong>Youth Con-nect Group</strong>, we stand by principles that drive us toward success and empower our members. Here are the values we uphold:</p>
+    
+            <ul>
+               <li>
+                  <strong>Unity:</strong> We believe that together, we can achieve anything. Through collaboration and teamwork, we rise above challenges and create lasting change.
+               </li>
+               <li>
+                  <strong>Integrity:</strong> We operate with honesty, transparency, and accountability, ensuring that everything we do is built on trust and ethical practices.
+               </li>
+               <li>
+                  <strong>Innovation:</strong> We embrace creative solutions and forward-thinking ideas, driving change and empowering the youth to take charge of their futures.
+               </li>
+               <li>
+                  <strong>Empowerment:</strong> We are dedicated to creating opportunities that enable every member to thrive, succeed, and unlock their full potential.
+               </li>
+               <li>
+                  <strong>Sustainability:</strong> We focus on long-term growth, responsible practices, and investments that ensure success for generations to come.
+               </li>
+               <li>
+                  <strong>Leadership:</strong> We nurture strong leaders who will inspire others, make wise decisions, and guide the youth toward financial independence and prosperity.
+               </li>
+           </ul>
+        </section>
+
+        <section class="why-join-us">
+           <h2>Why Join Us</h2>
+           <p>Joining the <strong>Youth Con-nect Group</strong> means becoming part of a vibrant and empowering community driven by the vision of financial independence, unity, and growth. Here’s why you should consider joining us:</p>
+   
+           <ul>
+               <li><strong>Access to Financial Education:</strong> We provide valuable resources and programs that enhance financial literacy. Learn how to save, invest, and manage your finances to secure a bright and sustainable future.</li>
+               <li><strong>Collaboration and Networking:</strong> Be part of a strong, unified network of young individuals. Connect with like-minded peers, share ideas, and collaborate on innovative initiatives that drive both personal and community success.</li>
+               <li><strong>Investment Opportunities:</strong> Take advantage of tailored investment programs designed to help you grow financially. We empower members to engage in collective investments for long-term economic stability.</li>
+               <li><strong>Leadership Development:</strong> We nurture future leaders. Gain mentorship and guidance from our experienced team, helping you unlock your potential and develop leadership skills to inspire others.</li>
+               <li><strong>Empowerment and Growth:</strong> Every member matters. Through inclusive practices and support, we create opportunities that enable you to thrive, succeed, and become a force for change in your community.</li>
+               <li><strong>Sustainability and Responsibility:</strong> Join a community committed to sustainable practices and long-term impact. Together, we build a legacy of growth and resilience that benefits generations to come.</li>
+           </ul>
+        </section>
+       
+        <section>
+            <h2>Call to Action</h2>
+            <p>Join us in making a difference! By becoming part of the <strong>Youth Con-nect Group</strong>, you’ll help build a brighter future for young people through collective savings, investments, and empowerment initiatives.</p>
+            <a href="/join/" class="cta">Join Us Today</a>
+        </section>
+    </div>
+</body>
 {% endblock %}
