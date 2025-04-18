@@ -16,7 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from . import views
 
+print("Views imported successfully!")
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('leaders/', include('leaders.urls')),  # Include app-specific URLs
@@ -26,6 +28,7 @@ urlpatterns = [
     path('about/', include('about.urls')),
     path('join/', include('join.urls', namespace='join')),
     path('contact/', include('contact.urls')),
+    path('send-message/', views.send_message, name='send_message'),
 ]
 
 from django.conf import settings

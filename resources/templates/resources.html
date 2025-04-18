@@ -8,6 +8,52 @@
 {% block title %}resources{% endblock %}
 
 {% block content %}
-<h1>Welcome to YouthConnect!</h1>
-<p>This is the resources content.</p>
+<body>
+
+    <header>
+        <h1>Empowerment Through Unity</h1>
+        <p>Together, We Rise: Strengthening Communities through Financial Literacy, Leadership, and Collective Growth.</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#savings">Savings & Investment</a></li>
+            <li><a href="#youth">Youth Empowerment</a></li>
+            <li><a href="#business">Business Incubation</a></li>
+            <li><a href="#group">Group-Owned Enterprises</a></li>
+            <li><a href="#outreach">Community Outreach</a></li>
+        </ul>
+    </nav>
+
+    <section id="programs">
+        <div class="program" id="savings">
+            <h2>Savings & Investment Projects</h2>
+            <p>Secure Your Future, One Investment at a Time.</p>
+            <button onclick="learnMore('savings')">Start Saving Now</button>
+        </div>
+
+        <div class="program" id="youth">
+            <h2>Youth Empowerment Trainings</h2>
+            <p>Unlock Your Leadership Potential.</p>
+            <button onclick="learnMore('youth')">Enroll Today</button>
+        </div>
+
+        <div class="program" id="business">
+            <h2>Business Incubation Programs</h2>
+            <p>Transform Ideas into Thriving Businesses.</p>
+            <button onclick="learnMore('business')">Apply for Incubation</button>
+        </div>
+
+        <div class="program" id="group">
+            <h2>Group-Owned Enterprises</h2>
+            <p>Rise Together, Build Together.</p>
+            <button onclick="learnMore('group')">Join a Collective</button>
+        </div>
+
+        <div class="program" id="outreach">
+            <h2>Community Outreach</h2>
+            <p>Uplift & Give Back.</p>
+            <button onclick="learnMore('outreach')">Get Involved</button>
+        </div>
+    </section>
 {% endblock %}

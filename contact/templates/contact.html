@@ -1,26 +1,65 @@
 {% extends 'base.html' %}
+
 {% load static %}
-{% block extra_styles %}
+
+{% block styles %}
 <link href="{% static 'css/contact.css' %}" rel="stylesheet">
+<script src="{% static 'js/notifications.js' %}"></script>
 {% endblock %}
 
 {% block title %}Contact Us{% endblock %}
 
 {% block content %}
-<h1>Contact Us</h1>
-<p>We’d love to hear from you! Use the form below to get in touch.</p>
-
-<form action="/contact/" method="post">
-    {% csrf_token %}
-    <label for="name">Name:</label><br>
-    <input type="text" id="name" name="name" placeholder="Enter your name" required><br><br>
-
-    <label for="email">Email:</label><br>
-    <input type="email" id="email" name="email" placeholder="Enter your email" required><br><br>
-
-    <label for="message">Message:</label><br>
-    <textarea id="message" name="message" rows="5" placeholder="Write your message here" required></textarea><br><br>
-
-    <input type="submit" value="Send Message">
-</form>
+    <main class="contact-page">
+        <h2>Contact Us</h2>
+        <p>We’d love to hear from you! Use the form below to get in touch:</p>
+        
+        <div class="contact-info">
+            <div class="info-item">
+                <h3>Address</h3>
+                <p>Youth Con-nect Headquarters<br>123 Unity Lane, Nansana, Uganda</p>
+            </div>
+            <div class="info-item">
+                <h3>Email</h3>
+                <p><a href="mailto:info@youthconnect.org">info@youthconnect.org</a></p>
+            </div>
+            <div class="info-item">
+                <h3>Phone</h3>
+                <p><a href="tel:+256123456789">+256 123 456 789</a></p>
+            </div>
+            <div class="info-item">
+                <h3>Social Media</h3>
+                <p>
+                    <a href="https://facebook.com/youthconnect" target="_blank">Facebook</a> | 
+                    <a href="https://twitter.com/youthconnect" target="_blank">Twitter</a> | 
+                    <a href="https://instagram.com/youthconnect" target="_blank">Instagram</a>
+                </p>
+            </div>
+        </div>
+        
+        <h3>Get in Touch</h3>
+        <form action="/send-message/" method="post" class="contactform">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" placeholder="Your Name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="Your Email" required>
+            </div>
+            <div class="form-group">
+                <label for="message">Message</label>
+                <textarea id="message" name="message_content" rows="5" placeholder="Your Message" required></textarea>
+            </div>
+            <button type="submit" class="btn-submit">Send Message</button>
+        </form>
+         <!-- Notification container -->
+   <!-- <div id="notification" class="notification">
+        <span id="notification-message"></span>
+        <span class="close-btn" onclick="hideNotification()">&times;</span>
+    </div>-->
+        <!-- Popup Notification (Initially Hidden) -->
+        <div id="popupNotification" class="popup">Message sent successfully!</div>
+    </main>
 {% endblock %}

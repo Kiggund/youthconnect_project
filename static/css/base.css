@@ -12,7 +12,7 @@ body {
     align-items: center;
     justify-content: space-between; /* Space out items horizontally */
     padding: 10px 20px; /* Add space inside the header */
-    background-color: #f9f9f9; /* Light background color */
+    background-color: black; /* Light background color */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
     position: fixed; /* Keep the header visible while scrolling */
     width: 100%; /* Full width */
@@ -22,10 +22,47 @@ body {
 
 /* Logo */
 .logo img {
-    width: 50px; /* Adjust logo size */
-    height: auto; /* Maintain aspect ratio */
+    width: 50px;
+    height: auto;
+    animation: vibrantColors 6s infinite; /* Combine animations */
 }
 
+/* Keyframes for Fading In and Out */
+/*@keyframes fadeInOut {
+    0% {
+        opacity: 1; /* Fully visible */
+    }
+  /*  50% {
+        opacity: 0.8; /* Slightly faded */
+    }
+    /*100% {
+        opacity: 1; /* Fully visible again */
+    }
+}
+
+/* Keyframes for Vibrant Colors */
+@keyframes vibrantColors {
+    0% {
+        filter: hue-rotate(0deg); /* Red */
+        
+    }
+    25% {
+        filter: hue-rotate(90deg); /* Yellow */
+        
+    }
+    50% {
+        filter: hue-rotate(180deg); /* Green */
+        
+    }
+    75% {
+        filter: hue-rotate(270deg); /* Blue */
+        
+    }
+    100% {
+        filter: hue-rotate(360deg); /* Back to Red */
+        
+    }
+}
 /* Title */
 .title h1 {
     font-size: 1.5rem;
@@ -35,35 +72,10 @@ body {
     font-weight: bold;
 }
 
-/* Hamburger Menu */
-/*.hamburger {
-    width: 60px;
-    height: 60px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-}
-
-/*.hamburger .bar {
-    width: 35px;
-    height: 5px;
-    background-color: #333;
-    margin: 6px 0;
-    transition: all 0.3s ease;
-}
-
 /* Responsive Design */
 @media (max-width: 768px) {
     .title h1 {
         font-size: 1rem; /* Adjust font size for smaller screens */
-    }
- /*   .hamburger {
-        width: 50px;
-        height: 50px;
-    }
-    .hamburger .bar {
-        width: 30px; /* Adjust size for bars */
     }
 }
 
