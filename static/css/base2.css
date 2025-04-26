@@ -1,0 +1,665 @@
+/* ============================================
+   COMPLETE BASE.CSS WITH THEME SYSTEM & FIXES
+   ============================================ */
+
+/* ===== THEME SYSTEM ===== */
+:root {
+  /* Light Theme (Default) */
+  --primary: #4CAF50;
+  --primary-dark: #3d8b40;
+  --secondary: #2c3e50;
+  --accent: #007bff;
+  --error: #d32f2f;
+  --text-color: #333;
+  --bg-color: #f4f4f9;
+  --card-bg: white;
+  --input-border: #e0e0e0;
+  --nav-bg: #333;
+  --footer-bg: #333;
+  --card-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+[data-theme="dark"] {
+  /* Dark Theme */
+  --text-color: #f5f5f5;
+  --bg-color: #1a1a1a;
+  --card-bg: #2d2d2d;
+  --input-border: #444;
+  --nav-bg: #111;
+  --footer-bg: #111;
+  --card-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+/* ===== BASE STYLES ===== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+body {
+  font-family: 'Roboto', sans-serif;
+  line-height: 1.6;
+  background: linear-gradient(135deg, var(--bg-color), #d6e0f5);
+  color: var(--text-color);
+  padding-top: 70px; /* Space for fixed header */
+/*  min-height: 100vh;*/
+  overflow-x: hidden;
+  align-items: center;
+}
+.container {
+  max-width: 100%;
+  margin: 0 auto;
+}
+.card, .footer-content {
+  min-width: 0;
+  overflow: hidden;
+}
+.footer-logo-text {
+  width: auto;
+  white-space: normal;
+}
+body, html {
+  margin: 0;
+  padding: 0;
+}
+.hero-section {
+  padding: 0 !important; /* Override any padding */
+}
+.full-width-section {
+  width: 100%;          /* Full viewport width */
+  margin-left: calc(-50vw + 50%); /* Center-align (optional) */
+  max-width: none;       /* Remove any max-width restrictions */
+}
+.mission-section {
+  flex: 1 1 100%; /* Force full width */
+  min-width: 100%; /* Prevent shrinking */
+}
+/* ===== TYPOGRAPHY ===== */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Poppins', sans-serif;
+  margin-bottom: 1rem;
+}
+
+h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+p {
+  margin-bottom: 1rem;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--primary);
+}
+
+/* ===== HEADER & NAVIGATION ===== */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  background-color: var(--nav-bg);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+  overflow-x: hidden;
+}
+
+.logo img {
+  width: 50px;
+  height: auto;
+  animation: vibrantColors 6s infinite, pulse 2s infinite alternate;
+}
+
+.title h1 {
+  font-size: 1.5rem;
+  color: var(--accent);
+  margin: 0;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* ===== MAIN NAVIGATION ===== */
+.nav-links {
+  display: flex;
+  list-style: none;
+  padding: 0;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  padding: 10px 20px;
+  transition: all 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: var(--accent);
+  transform: translateY(-2px);
+}
+
+/* ===== HAMBURGER MENU ===== */
+.hamburger {
+  display: none;
+  width: 40px;
+  height: 40px;
+  background-color: var(--card-bg);
+  border-radius: 4px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  padding: 8px;
+}
+
+.hamburger .bar {
+  width: 100%;
+  height: 3px;
+  background-color: var(--text-color);
+  margin: 3px 0;
+  transition: all 0.3s ease;
+}
+
+.hamburger.active .bar:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.hamburger.active .bar:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.active .bar:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+/* ===== THEME TOGGLE BUTTON ===== */
+.theme-toggle {
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  z-index: 1001;
+  transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+  transform: scale(1.1);
+}
+
+.dark-icon { display: none; }
+[data-theme="dark"] .light-icon { display: none; }
+[data-theme="dark"] .dark-icon { display: inline; }
+
+/* ===== ANIMATIONS ===== */
+@keyframes vibrantColors {
+  0% { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(360deg); }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.1); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Logo Animations */
+@keyframes rotateAndScale {
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(1.2); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+@keyframes glowing {
+  0% { box-shadow: 0 0 10px rgba(255, 165, 0, 0.5); }
+  100% { box-shadow: 0 0 20px rgba(255, 69, 0, 0.8); }
+}
+
+/* Typing Animation */
+#logo-text {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #fff;
+  margin-top: 10px;
+  width: 27ch;
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: 2px solid #fff;
+  animation: 
+    typing 4s steps(25, end), 
+    eraseTypeLoop 8s infinite;
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 27ch; }
+}
+
+@keyframes eraseTypeLoop {
+  0%, 50% { width: 25ch; opacity: 1; }
+  75% { width: 0; opacity: 1; }
+  100% { width: 0; opacity: 0; }
+}
+
+/* ===== MAIN CONTENT LAYOUT ===== */
+main {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.card {
+  flex: 1 1 calc(33.33% - 20px);
+  background: var(--card-bg);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: var(--card-shadow);
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+/* ===== FOOTER ===== */
+/*.site-footer {
+  text-align: center;
+  padding: 20px;
+  background-color: var(--footer-bg);
+  color: white;
+  margin-top: 2rem;
+}
+
+.footer-logo {
+   display: relative;
+   align-items: center;
+  /* height: 100px;
+   width: 100px;*/
+  /* animation: glowing 2s infinite alternate;
+   box-shadow: 15px rgba(255, 165, 0, 0.7), 0 0 30px rgba(255, 69, 0, 0.7); /* Glow effect */
+  /* border-radius: 10%;
+}
+
+.footer-logo {
+    width: 200px; /* Adjust as needed */
+   /* animation: rotateAndScale 4s infinite, colorChange 5s infinite, colorChange 5s infinite; /*Combined animations*/
+   /* box-shadow: 0 0 10px rgba(255, 165, 0, 0.5);
+}*/
+
+/* Style for the footer */
+.site-footer {
+    text-align: center; /* Ensures text is centered */
+    display: flex; /* Makes it a flex container */
+    flex-direction: column;
+    justify-content: center; /* Centers items horizontally */
+    align-items: center; /* Centers items vertically */
+    padding: 20px; /* Adds spacing */
+    background-color: #333; /* Footer background */
+    color: #fff; /* Footer text color */
+    width: 100%
+}
+
+/* Style for the footer content */
+.footer-content {
+    display: flex; /* Flex container for content */
+    flex-direction: column; /* Makes items stack vertically */
+   /* align-items: items within the column */
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+/* Style for the footer logo */
+.footer-logo img {
+    max-width: 200px; /* Restricts image size */
+    margin-bottom: 10px; /* Adds spacing below the image */
+}
+
+.footer-logo-text {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #fff;
+    margin-top: 10px;
+    width: 27ch; /* Adjust width based on text length */
+    white-space: nowrap;
+    overflow: hidden;
+    border-right: 2px solid #fff;
+    /*animation: typing 4s steps(25, end), blink 0.5s step-end infinite alternate, fadeOut 8s 4s infinite; /* Combine typing, blinking, and fading */
+    /*animation-timing-function: steps(25); /* Adjust typing smoothness */
+   /* animation: typing 4s steps(25, end), erase 4s 4s infinite; /* Typing and erasing loop */
+    animation: typing 4s steps(25, end), eraseTypeLoop 8s infinite; /* Combine typing and erasing in a loop */
+}
+@keyframes shadowPulse {
+    0%, 100% {
+        box-shadow: 10px rgba(255, 165, 0, 0.5);
+    }
+    50% {
+        box-shadow: 30px rgba(255, 69, 0, 1);
+    }
+}
+
+@keyframes rotateAndScale {
+    0% {
+        transform: rotate(0deg) scale(1); /* Original size and start rotation */
+    }
+    50% {
+        transform: rotate(180deg) scale(1.2); /* Rotate halfway and zoom in */
+    }
+    100% {
+        transform: rotate(360deg) scale(1); /* Complete rotation and reset size */
+    }
+}
+
+@keyframes fadeInOut {
+    0%, 100% {
+        opacity: 0; /* Fully transparent */
+    }
+    50% {
+        opacity: 1; /* Fully visible */
+    }
+}
+
+@keyframes glowing {
+    0% {
+        box-shadow: 20px rgba(255, 165, 0, 0.7), 0 0 40px rgba(255, 69, 0, 0.7);
+    }
+    100% {
+        box-shadow: 40px rgba(255, 165, 0, 1), 0 0 60px rgba(255, 69, 0, 1);
+    }
+}
+
+@keyframes typing {
+    from {
+        width: 0;
+    }
+    to {
+        width: 27ch;
+    }
+}
+
+/* Erasing Effect */
+/*@keyframes erase {
+    from {
+        width: 25ch; /* Start with full text visible */
+    }
+  /*  to {
+        width: 0; /* End with no text visible */
+    }
+}
+
+/* Combined Erase and Restart Typing */
+@keyframes eraseTypeLoop {
+    0%, 50% {
+        width: 25ch; /* Full text visible during typing */
+        opacity: 1; /* Fully visible while typing */
+    }
+    75% {
+        width: 0; /* Begin erasing */
+        opacity: 1; /* Remain visible while erasing */
+    }
+    100% {
+        width: 0; /* Text fully erased */
+        opacity: 0; /* Faded out completely */
+    }
+}
+/* Fading Effect */
+@keyframes fadeOut {
+    50%, 100%*/ {
+       opacity: 0; /* Fully transparent */
+    }
+    0%, 25% {
+       opacity: 1; /* Fully visible */
+    }
+}
+
+/* Blinking Cursor Effect */
+@keyframes blink {
+    from {
+        border-color: transparent;
+    }
+    to {
+        border-color: #fff; /* Simulate a blinking cursor */
+    }
+}
+
+/* Keyframes for color change */
+@keyframes colorChange {
+    0% {
+        filter: hue-rotate(0deg);
+    }
+    100% {
+        filter: hue-rotate(360deg);
+    }
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+
+/* Base Mobile Styles (Default) */
+body {
+    font-size: 14px;
+}
+
+.header {
+    padding: 8px 15px;
+}
+
+.logo img {
+    width: 40px;
+}
+
+.title h1 {
+    font-size: 1.2rem;
+}
+
+.nav-links {
+    flex-direction: column;
+    position: fixed;
+    top: 60px;
+    right: -100%;
+    width: 80%;
+    max-width: 300px;
+    background-color: var(--nav-bg);
+    box-shadow: -5px 0 15px rgba(0,0,0,0.2);
+    transition: right 0.3s ease;
+}
+
+.nav-links.active {
+    right: 0;
+}
+
+.nav-links li {
+    padding: 8px 15px;
+}
+
+.hamburger {
+    display: flex;
+}
+
+.theme-toggle {
+    position: fixed;
+    top: 15px;
+    right: 60px;
+    width: 36px;
+    height: 36px;
+}
+
+main div {
+    flex: 1 1 100%;
+    margin-bottom: 15px;
+}
+
+/* Small Tablets (600px and up) */
+@media (min-width: 600px) {
+    body {
+        font-size: 15px;
+    }
+    
+    .header {
+        padding: 10px 20px;
+    }
+    
+    .logo img {
+        width: 45px;
+    }
+    
+    .title h1 {
+        font-size: 1.3rem;
+    }
+    
+    main div {
+        flex: 1 1 calc(50% - 15px);
+    }
+}
+
+/* Large Tablets and Small Laptops (768px and up) */
+@media (min-width: 768px) {
+    body {
+        font-size: 16px;
+    }
+    
+    .header {
+        padding: 10px 30px;
+    }
+    
+    .logo img {
+        width: 50px;
+    }
+    
+    .title h1 {
+        font-size: 1.5rem;
+    }
+    
+    .nav-links {
+        position: static;
+        flex-direction: row;
+        width: auto;
+        max-width: none;
+        background: transparent;
+        box-shadow: none;
+    }
+    
+    .hamburger {
+        display: none;
+    }
+    
+    .theme-toggle {
+        position: static;
+        margin-left: 15px;
+    }
+    
+    main div {
+        flex: 1 1 calc(33.33% - 20px);
+    }
+}
+
+/* Desktops (1024px and up) */
+@media (min-width: 1024px) {
+    body {
+        font-size: 17px;
+    }
+    
+    .header {
+        padding: 12px 40px;
+    }
+    
+    .logo img {
+        width: 55px;
+    }
+    
+    .title h1 {
+        font-size: 1.7rem;
+    }
+    
+    main div {
+        flex: 1 1 calc(25% - 25px);
+    }
+}
+
+/* Large Desktops (1200px and up) */
+@media (min-width: 1200px) {
+    body {
+        font-size: 18px;
+    }
+    
+    .header {
+        padding: 15px 50px;
+    }
+    
+    main {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+}
+
+/* Special Cases for Very Small Devices */
+@media (max-width: 400px) {
+    body {
+        font-size: 13px;
+    }
+    
+    .header {
+        flex-wrap: wrap;
+    }
+    
+    .title {
+        order: -1;
+        width: 100%;
+        margin-top: 5px;
+    }
+    
+    .logo img {
+        width: 35px;
+    }
+    
+    .nav-links {
+        top: 100px;
+    }
+}
+
+/* Landscape Orientation Adjustments */
+@media (max-height: 500px) and (orientation: landscape) {
+    .header {
+        position: relative;
+    }
+    
+    .nav-links {
+        top: 70px;
+        max-height: calc(100vh - 70px);
+        overflow-y: auto;
+    }
+}

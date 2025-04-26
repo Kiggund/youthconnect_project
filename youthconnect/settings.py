@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-17(1nahjvix@1sj!ily)l^fqt03wd(3jaur@kht5bk^%@a@s(g
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     'news_events',
     'resources',
     'youthconnect',
+    'payments',
+    'paypal.standard.ipn',
 ]
 
 MIDDLEWARE = [
@@ -114,6 +116,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
+TIME_ZONE = 'Africa/Kampala'
+
 TIME_ZONE = 'UTC'
 
 USE_I18N = True
@@ -133,3 +137,40 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# PayPal Configuration
+PAYPAL_RECEIVER_EMAIL = "your-paypal-business-email@example.com"
+PAYPAL_TEST = True  # Set to False when moving to production
+
+#mtn api
+MTN_API_KEY = "your_api_key_here"  # Replace with your actual sandbox API key
+MTN_COLLECTION_URL = "https://sandbox.momodeveloper.mtn.com/collection/v1_0/requesttopay"
+MTN_ACCESS_TOKEN_URL = "https://sandbox.momodeveloper.mtn.com/collection/token/"
+
+#Sends email OTP
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'abdulbasitkiggundu@gmail.com'  # Your Gmail email address
+EMAIL_HOST_PASSWORD = 'yfbfjrrfvpibygdn'  # Your new App Password
+
+#Error log files for debugging
+"""LOGGING = {
+    'version': 1,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR / 'debug.log',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}"""

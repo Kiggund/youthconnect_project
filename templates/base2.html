@@ -1,0 +1,107 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Youth Connect - Empowering youth for a brighter future">
+    
+    <title>{% block title %}Youth Connect{% endblock %}</title>
+    
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="{% static 'images/youth-connect.png' %}" type="image/png">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    {% block styles %}{% endblock %}
+</head>
+<body>
+    <!-- Theme Toggle -->
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+        <i class="fas fa-moon light-icon"></i>
+        <i class="fas fa-sun dark-icon"></i>
+    </button>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <img src="{% static 'images/youth-connect.png' %}" alt="Youth Connect Logo" loading="lazy">
+        </div>
+        <div class="title">
+            <h1>Youth Connect</h1>
+        </div>
+        <div class="hamburger" id="menuToggle">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="sticky-nav">
+        <ul class="nav-links" id="navLinks">
+            <li><a href="/homepage/"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="/leaders/"><i class="fas fa-users"></i> Leaders</a></li>
+            <li><a href="/resources/"><i class="fas fa-project-diagram"></i> Programs</a></li>
+            <li><a href="/news_events/"><i class="fas fa-newspaper"></i> News & Events</a></li>
+            <li><a href="/about/"><i class="fas fa-info-circle"></i> About</a></li>
+            <li><a href="{% url 'join:register' %}"><i class="fas fa-user-plus"></i> Join</a></li>
+            <li><a href="/contact/"><i class="fas fa-envelope"></i> Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-image">
+            <img src="{% static 'images/group2.jpg' %}" alt="Youth group photo" loading="lazy">
+            <div class="hero-text">
+                <div id="animated-text"></div>
+                <p>Empowering youth for a brighter future. <strong>United we stand, divided we fall</strong></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="content-wrapper">
+        {% block content %}
+        <!-- Child template content goes here -->
+        {% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <img src="{% static 'images/youth-connect.png' %}" alt="Logo" loading="lazy" style="height:50px; width:auto;">
+                <span>United we stand, Divided we fall!</span>
+            </div>
+            <div class="footer-links">
+                <a href="/privacy/">Privacy Policy</a>
+                <a href="/terms/">Terms of Service</a>
+                <a href="/contact/">Contact Us</a>
+            </div>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2025 Youth Connect. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Success Animation SVG -->
+    <svg class="success-checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52" aria-hidden="true">
+        <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
+        <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+    </svg>
+
+    <!-- JavaScript -->
+    <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>

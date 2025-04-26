@@ -1,37 +1,32 @@
+/* ===== REGISTRATION FORM ===== */
+.registration-container {
+  max-width: 800px;
+  margin: 6rem auto 2rem; /* Account for fixed header */
+  padding: 2rem;
+  align-items: center;
+  overflow: hidden;
+}
+
 .registration-form {
-    max-width: 600px;
-    margin: auto;
-    padding: 20px;
-    background: white;
-    box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
-    border-radius: 10px;
+  background: white;
+  padding: 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-.registration-form label {
-    font-weight: bold;
-    display: block;
-    margin-top: 10px;
+.form-section {
+  margin-bottom: 1rem;
+  padding: 2rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
 }
 
-.registration-form input, .registration-form select {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-}
-
-.registration-form button {
-    background: #4CAF50;
-    color: white;
-    padding: 12px;
-    width: 100%;
-    border: none;
-    font-size: 1.2rem;
-    cursor: pointer;
-    margin-top: 15px;
-}
-
-.registration-form button:hover {
-    background: #45A049;
+/* Input fields */
+.registration-form input,
+.registration-form select {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
 }

@@ -156,4 +156,3 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize
     hamburger.setAttribute('aria-expanded', 'false');
 });
-

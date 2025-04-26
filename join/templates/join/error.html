@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="alert alert-danger">
+    {{ error }}
+</div>
+<a href="{% url 'join:register' %}" class="btn btn-primary">Back to Registration</a>
+{% endblock %}

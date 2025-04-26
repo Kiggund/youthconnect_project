@@ -41,9 +41,11 @@
             <li><a href="/contact/">Contact Us</a></li>
         </ul>
     </nav>
+    {% if not hide_registration_link %}
     <li class="nav-item">
-    <a class="nav-link" href="{% url 'join:register' %}">Register</a>
-   </li>
+        <a class="nav-link" href="{% url 'join:register' %}">Register</a>
+    </li>
+    {% endif %}
     <!-- Hero Section -->
     <header>
         <img src="{% static 'images/group2.jpg' %}" alt="Youth Connect Hero Banner" style="width:100%; height:auto;">

@@ -1,0 +1,20 @@
+/* ===== OTP VERIFICATION ===== */
+.verification-container {
+  max-width: 500px;
+  margin: 6rem auto 2rem;
+  padding: 2rem;
+}
+
+.otp-form {
+  background: white;
+  padding: 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.otp-input-group input {
+  font-size: 1.5rem;
+  letter-spacing: 0.5rem;
+  text-align: center;
+  padding: 1rem;
+}

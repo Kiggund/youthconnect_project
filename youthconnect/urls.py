@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from . import views
+from paypal.standard.ipn.views import ipn
 
 print("Views imported successfully!")
 urlpatterns = [
@@ -29,6 +30,8 @@ urlpatterns = [
     path('join/', include('join.urls', namespace='join')),
     path('contact/', include('contact.urls')),
     path('send-message/', views.send_message, name='send_message'),
+    path('payments/', include("payments.urls")),
+    path('paypal-ipn/', ipn, name='paypal-ipn'),
 ]
 
 from django.conf import settings

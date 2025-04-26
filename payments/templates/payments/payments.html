@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load static %}
+
+ <link rel="stylesheet" href="{% static 'payments/styles.css' %}"> 
+
+{% block content %}
+    <h1>Premium Programs & Initiatives</h1>
+    <p>Subscribe to unlock exclusive learning content.</p>
+
+    <form action="{% url 'paypal-ipn' %}" method="post">
+        {{ form.render }}
+        {% csrf_token %}
+        <button type="submit">Subscribe Now</button>
+    </form>
+  <script src="{% static 'payments/script.js' %}"></script>
+{% endblock %}
