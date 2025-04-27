@@ -206,6 +206,22 @@ body {
   color: var(--primary-dark);
 }
 
+.map-button {
+    margin-top: 1rem;
+    padding: 0.75rem 1.5rem;
+    background: var(--primary-light);
+    color: var(--primary-dark);
+    border: none;
+    border-radius: var(--radius);
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.map-button:hover {
+    background: var(--primary);
+    color: white;
+}
 /* ====================== CONTACT FORM ====================== */
 .contact-form-section {
   max-width: 800px;
