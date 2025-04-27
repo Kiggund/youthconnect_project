@@ -1,54 +1,76 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_POST
-from .models import ContactMessage  # Ensure your model import is correct
+from django.views.decorators.csrf import ensure_csrf_cookie
+from .models import ContactMessage  # Import your ContactMessage model
 import logging
 
+# Set up logging
 logger = logging.getLogger(__name__)
 
 @ensure_csrf_cookie
 def contact_page(request):
     """
-    Render the contact form page with a CSRF token.
+    Render the contact form page.
+    This view also ensures a CSRF token is included in the page.
     """
-    return render(request, 'contact/form.html')  # Ensure the template path matches your setup
+    return render(request, 'contact/form.html')  # Replace with your actual form template path
+
 
 @require_POST
+@ensure_csrf_cookie
 def send_message(request):
     """
-    Process contact form submissions (AJAX or normal POST).
+    Handle contact form submissions.
+    Supports both AJAX and normal POST requests.
     """
+    # Check if the request is AJAX
     is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
 
-    required_fields = ['name', 'email', 'message']
-    missing_fields = [field for field in required_fields if field not in request.POST]
+    # Extract form fields
+    name = request.POST.get('name', '').strip()
+    email = request.POST.get('email', '').strip()
+    message = request.POST.get('message', '').strip()
 
-    if missing_fields:
-        message = f"Missing required fields: {', '.join(missing_fields)}"
-        if is_ajax:
-            return JsonResponse({'status': 'error', 'message': message}, status=400)
-        else:
-            return render(request, 'contact/form.html', {'error_message': message})
+    # Validate fields
+    if not name:
+        error_message = "Name field cannot be empty."
+        return _handle_error_response(is_ajax, error_message, request)
+
+    if not email:
+        error_message = "Email field cannot be empty."
+        return _handle_error_response(is_ajax, error_message, request)
+
+    if not message:
+        error_message = "Message field cannot be empty."
+        return _handle_error_response(is_ajax, error_message, request)
 
     try:
-        message = ContactMessage.objects.create(
-            name=request.POST['name'].strip(),
-            email=request.POST['email'].strip().lower(),
-            content=request.POST['message'].strip()
+        # Save the message to the database
+        contact_message = ContactMessage.objects.create(
+            name=name,
+            email=email.lower(),
+            content=message
         )
-        logger.info(f"Message successfully saved with ID: {message.id}")
+        logger.info(f"Message successfully saved with ID: {contact_message.id}")
 
         success_message = "Your message has been received! We will respond shortly."
         if is_ajax:
-            return JsonResponse({'status': 'success', 'message': success_message, 'id': message.id})
+            return JsonResponse({'status': 'success', 'message': success_message, 'id': contact_message.id})
         else:
             return render(request, 'contact/success.html', {'message': success_message})
 
     except Exception as e:
         logger.error(f"Error processing message: {e}", exc_info=True)
         error_message = "Failed to process your message. Please try again."
-        if is_ajax:
-            return JsonResponse({'status': 'error', 'message': error_message}, status=500)
-        else:
-            return render(request, 'contact/form.html', {'error_message': error_message})
+        return _handle_error_response(is_ajax, error_message, request)
+
+
+def _handle_error_response(is_ajax, error_message, request):
+    """
+    Helper function to handle errors and return the appropriate response.
+    """
+    if is_ajax:
+        return JsonResponse({'status': 'error', 'message': error_message}, status=400)
+    else:
+        return render(request, 'contact/form.html', {'error_message': error_message})

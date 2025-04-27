@@ -101,6 +101,19 @@
                 </p>
             </div>
         </form>
+        <form id="contactForm" action="/contact/send/" method="post">
+    {% if errors %}
+        <ul class="error-list">
+            {% for field, error in errors.items %}
+                <li><strong>{{ field }}:</strong> {{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <input type="text" name="name" placeholder="Your Name" required>
+    <input type="email" name="email" placeholder="Your Email" required>
+    <textarea name="message" placeholder="Your Message" required></textarea>
+    <button type="submit">Send</button>
+</form>
     </section>
 
     <!-- Result Container (hidden by default) -->
