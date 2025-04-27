@@ -107,29 +107,3 @@ class Member(models.Model):
     class Meta:
         ordering = ['full_name']
 
-
-# =============================== #
-#         Message Model           #
-# =============================== #
-
-class Message(models.Model):
-    """
-    Stores messages sent by users via the contact form.
-
-    Fields:
-        - name (Sender's name)
-        - email (Sender's email)
-        - content (Message text)
-        - timestamp (When message was submitted)
-    """
-    
-    name = models.CharField(max_length=255, help_text="Name of the sender")
-    email = models.EmailField(help_text="Email of the sender")
-    content = models.TextField(help_text="Message content")
-    timestamp = models.DateTimeField(auto_now_add=True, help_text="Timestamp when the message was submitted")
-
-    def __str__(self):
-        return f"Message from {self.name}"
-
-    class Meta:
-        ordering = ['timestamp']

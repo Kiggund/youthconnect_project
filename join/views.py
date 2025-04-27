@@ -5,12 +5,10 @@ from django.http import JsonResponse, HttpResponseRedirect
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.cache import never_cache
 from django.core.cache import cache
-from django.contrib import messages
 from django.db import transaction
 from django.conf import settings
 import logging
 from .models import Member
-from .models import Message
 from .forms import MemberForm, OTPVerificationForm
 
 logger = logging.getLogger(__name__)
@@ -181,20 +179,3 @@ def success(request):
     """Success page after verification"""
     logger.debug("✅ Success page accessed")
     return render(request, 'join/success.html')
-
-### **SEND MESSAGE**
-@never_cache
-#logger = logging.getLogger(__name__)
-
-def send_message(request):
-    """Handles sending messages via a simple API."""
-    if request.method == "POST":
-        logger.debug(f"📩 Incoming POST data: {request.POST}")  # Log incoming request data
-        
-        message = request.POST.get("message", "")
-        if not message:
-            return JsonResponse({"error": "Message content required"}, status=400)
-        
-        return JsonResponse({"status": "success", "length": len(message), "message": message})
-
-    return JsonResponse({"error": "Invalid request method"}, status=405)

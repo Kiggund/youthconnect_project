@@ -65,5 +65,8 @@
     </div>-->
         <!-- Popup Notification (Initially Hidden) -->
         <div id="popupNotification" class="popup">Message sent successfully!</div>
+        {% block scripts %}
+           <script src="{% static 'js/contact.js' %}"></script>
+        {% endblock %}
     </main>
 {% endblock %}

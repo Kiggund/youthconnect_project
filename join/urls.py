@@ -1,6 +1,5 @@
 from django.urls import path
 from . import views
-from .views import send_message
 app_name = 'join'
 
 urlpatterns = [
@@ -10,5 +9,4 @@ urlpatterns = [
     path('resend-otp/<str:email>/', views.resend_otp, name='resend_otp'),
     path('success/', views.success, name='success'),
    # path('contact/', views.contact, name='contact'),
-    path('send-message/', send_message, name='send_message'),
 ]

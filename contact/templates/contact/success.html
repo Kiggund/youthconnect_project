@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="success-message">
+    <h2>Thank You!</h2>
+    <p>Your message has been received (ID: {{ message_id }}).</p>
+    <a href="/contact/" class="btn">Back to Contact Form</a>
+</div>
+{% endblock %}
