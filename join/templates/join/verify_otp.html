@@ -1,87 +1,48 @@
-{% extends 'base.html' %}
-
-{% block title %}Email Verification{% endblock %}
-
-{% block content %}
-<div class="container mt-4">
-    <div class="card">
-        <div class="card-header bg-primary text-white">
-            <h2>Verify Your Email</h2>
-        </div>
-        <div class="card-body">
-            <p class="lead">We've sent a 6-digit verification code to <strong>{{ email }}</strong></p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify OTP</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/verification.css' %}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="otp-container">
+        <div class="otp-card">
+            <h2 class="otp-header">Verify Your Email</h2>
+            <div id="notification-area"></div>
+            <p class="otp-lead">Enter the 6-digit code sent to <strong>{{ email }}</strong>.</p>
             
-            <form action="{% url 'join:verify_otp' email=email %}" method="post">
+            <form id="otp-form" method="POST" action="{% url 'join:verify_otp' email=email %}">
                 {% csrf_token %}
-                
-                <div class="form-group mb-3">
-                    <label for="otp">Verification Code</label>
-                    <input type="text" 
-                           id="otp" 
-                           name="otp" 
-                           class="form-control" 
-                           placeholder="Enter 6-digit code"
-                           pattern="\d{6}"
-                           maxlength="6"
-                           required>
-                </div>
-                
-                <button type="submit" class="btn btn-primary btn-block">
-                    Verify Account
-                </button>
-                
-                {% if form.errors %}
-                <div class="alert alert-danger mt-3">
-                    {% for field, errors in form.errors.items %}
-                        {% for error in errors %}
-                            <p>{{ error }}</p>
-                        {% endfor %}
-                    {% endfor %}
-                </div>
-                {% endif %}
+                <input type="text" id="otp-input" class="otp-input" name="otp" placeholder="Enter OTP" maxlength="6" required>
+                <button type="submit" class="otp-btn">Verify</button>
             </form>
             
-            <div class="text-center mt-3">
+            <div class="otp-resend">
                 <p class="text-muted">Didn't receive the code?</p>
-                <a href="{% url 'join:resend_otp' email=email %}" 
-                   class="btn btn-outline-secondary"
-                   id="resend-otp-btn">
-                    Resend OTP
-                </a>
-                {% if member.otp_attempts > 0 %}
-                <div class="alert alert-warning mt-2">
-                    Attempts used: {{ member.otp_attempts }}/3
-                </div>
-                {% endif %}
+                <button id="resend-otp-btn" class="otp-btn-resend" disabled>
+                    Resend OTP <span id="cooldown-timer"></span>
+                </button>
             </div>
         </div>
     </div>
-</div>
 
-<script>
-// Optional: Add countdown timer for resend button
-document.addEventListener('DOMContentLoaded', function() {
-    const resendBtn = document.getElementById('resend-otp-btn');
-    let cooldown = 30; // 30 second cooldown
-    
-    function updateResendButton() {
-        if (cooldown > 0) {
-            resendBtn.innerHTML = `Resend OTP (${cooldown}s)`;
-            resendBtn.classList.add('disabled');
-            cooldown--;
-            setTimeout(updateResendButton, 1000);
-        } else {
-            resendBtn.innerHTML = 'Resend OTP';
-            resendBtn.classList.remove('disabled');
-        }
-    }
-    
-    resendBtn.addEventListener('click', function() {
-        cooldown = 30;
-        updateResendButton();
-    });
-    
-    updateResendButton();
-});
-</script>
-{% endblock %}
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Configuration Object -->
+    <script>
+        window.OTP_CONFIG = {
+            email: "{{ email|escapejs }}",
+            csrfToken: "{{ csrf_token }}",
+            resendUrl: "{% url 'join:resend_otp' email='EMAIL_PLACEHOLDER' %}"
+                .replace('EMAIL_PLACEHOLDER', encodeURIComponent("{{ email|escapejs }}")),
+            cooldownDuration: 30 // seconds
+        };
+    </script>
+
+    <script src="{% static 'js/verify_otp.js' %}?v={% now 'U' %}"></script>
+</body>
+</html>

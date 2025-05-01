@@ -1,0 +1,232 @@
+document.addEventListener('DOMContentLoaded', function() {
+    // ======================
+    // DOM ELEMENTS
+    // ======================
+    const resendBtn = document.getElementById('resend-otp-btn');
+    const cooldownTimer = document.getElementById('cooldown-timer');
+    const otpForm = document.getElementById('otp-form');
+    const otpInput = document.getElementById('otp-input');
+    const notificationArea = document.getElementById('notification-area');
+
+    // ======================
+    // STATE VARIABLES
+    // ======================
+    let cooldownInterval;
+    let failedAttempts = 0;
+    const MAX_ATTEMPTS = 3;
+
+    // ======================
+    // INITIALIZATION
+    // ======================
+    startCooldown();
+
+    // ======================
+    // EVENT LISTENERS
+    // ======================
+    otpForm.addEventListener('submit', handleSubmit);
+    resendBtn.addEventListener('click', handleResendOtp);
+
+    // ======================
+    // CORE FUNCTIONS
+    // ======================
+
+    /**
+     * Handles form submission
+     */
+    async function handleSubmit(e) {
+        e.preventDefault();
+        
+        if (!validateOtpFormat(otpInput.value)) {
+            showToast("Invalid OTP format. Please enter a 6-digit code.", "error");
+            return;
+        }
+
+        try {
+            const formData = new FormData(otpForm);
+            const response = await fetch(otpForm.action, {
+                method: 'POST',
+                body: formData,
+                credentials: 'include'
+            });
+
+            if (response.redirected) {
+                window.location.href = response.url;
+                return;
+            }
+
+            const data = await response.json();
+            if (data.valid) {
+                handleSuccess(data.redirect_url);
+            } else {
+                handleFailedAttempt(data.message);
+            }
+        } catch (error) {
+            handleVerificationError(error);
+        }
+    }
+
+    /**
+     * Handles OTP resend request
+     */
+    async function handleResendOtp() {
+        if (!window.OTP_CONFIG?.email) {
+            showToast("System error: Email configuration missing", "error");
+            return;
+        }
+
+        try {
+            // UI Feedback
+            resendBtn.disabled = true;
+            resendBtn.innerHTML = 'Sending... <i class="fas fa-spinner fa-spin"></i>';
+            showToast("Sending new OTP...", "info");
+
+            // API Request
+            const response = await fetch(window.OTP_CONFIG.resendUrl, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': window.OTP_CONFIG.csrfToken,
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include'
+            });
+
+            if (!response.ok) throw new Error('Network response was not ok');
+            
+            const data = await response.json();
+            if (data.status === 'success') {
+                handleResendSuccess();
+            } else {
+                throw new Error(data.message || 'Failed to resend OTP');
+            }
+        } catch (error) {
+            handleResendError(error);
+        } finally {
+            resetResendButton();
+        }
+    }
+
+    // ======================
+    // SUPPORT FUNCTIONS
+    // ======================
+
+    /**
+     * Starts the cooldown timer
+     */
+    function startCooldown() {
+        let seconds = window.OTP_CONFIG?.cooldownDuration || 30;
+        updateTimerDisplay(seconds);
+
+        cooldownInterval = setInterval(() => {
+            seconds--;
+            updateTimerDisplay(seconds);
+            if (seconds <= 0) {
+                clearInterval(cooldownInterval);
+                enableResendButton();
+            }
+        }, 1000);
+    }
+
+    /**
+     * Validates OTP format (6 digits)
+     */
+    function validateOtpFormat(otp) {
+        return /^\d{6}$/.test(otp);
+    }
+
+    /**
+     * Shows toast notification
+     */
+    function showToast(message, type) {
+        clearToasts(); // Clear previous toasts
+        
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        toast.textContent = message;
+        
+        const container = document.getElementById('toast-container');
+        container.appendChild(toast);
+
+        setTimeout(() => {
+            toast.classList.add('fade-out');
+            setTimeout(() => toast.remove(), 500);
+        }, 5000);
+    }
+
+    // ======================
+    // UI HELPER FUNCTIONS
+    // ======================
+
+    function updateTimerDisplay(seconds) {
+        cooldownTimer.textContent = `(${seconds}s)`;
+        resendBtn.disabled = true;
+    }
+
+    function enableResendButton() {
+        resendBtn.disabled = false;
+        cooldownTimer.textContent = '';
+    }
+
+    function resetResendButton() {
+        resendBtn.innerHTML = 'Resend OTP';
+    }
+
+    function clearToasts() {
+        const container = document.getElementById('toast-container');
+        while (container.firstChild) {
+            container.removeChild(container.firstChild);
+        }
+    }
+
+    // ======================
+    // RESPONSE HANDLERS
+    // ======================
+
+    function handleSuccess(redirectUrl) {
+        window.location.href = redirectUrl;
+    }
+
+    function handleFailedAttempt(errorMessage) {
+        failedAttempts++;
+        showToast(errorMessage || "Invalid OTP", "error");
+        
+        if (failedAttempts >= MAX_ATTEMPTS) {
+            lockAccount();
+        }
+    }
+
+    function handleVerificationError(error) {
+        console.error("Verification error:", error);
+        showToast("Verification failed. Invalid OTP.", "error");
+    }
+
+    function handleResendSuccess() {
+        showToast("New OTP sent successfully!", "success");
+        resetFailedAttempts();
+        resetCooldown();
+    }
+
+    function handleResendError(error) {
+        console.error("Resend error:", error);
+        showToast(error.message || "Failed to resend OTP", "error");
+    }
+
+    // ======================
+    // SECURITY FUNCTIONS
+    // ======================
+
+    function resetCooldown() {
+        clearInterval(cooldownInterval);
+        startCooldown();
+    }
+
+    function resetFailedAttempts() {
+        failedAttempts = 0;
+        otpInput.disabled = false;
+    }
+
+    function lockAccount() {
+        otpInput.disabled = true;
+        resendBtn.disabled = true;
+        showToast("Account locked after 3 failed attempts", "error");
+    }
+});

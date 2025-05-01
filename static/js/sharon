@@ -1,0 +1,213 @@
+document.addEventListener('DOMContentLoaded', function() {
+    // DOM Elements
+    const resendBtn = document.getElementById('resend-otp-btn');
+    const cooldownTimer = document.getElementById('cooldown-timer');
+    const otpForm = document.getElementById('otp-form');
+    const otpInput = document.getElementById('otp-input');
+    const verifyBtn = otpForm.querySelector('button[type="submit"]');
+    const lockoutDisplay = document.createElement('div');
+
+    // State Management
+    let cooldownInterval;
+    let lockoutInterval;
+    let failedAttempts = 0;
+    const MAX_ATTEMPTS = 3;
+    const LOCKOUT_DURATION = 300; // 5 minutes
+
+    // Initialize
+    initLockoutDisplay();
+    startCooldown();
+
+    // Event Listeners
+    otpForm.addEventListener('submit', handleSubmit);
+    resendBtn.addEventListener('click', handleResendOtp);
+
+    // ======================
+    // MAIN FUNCTIONS
+    // ======================
+
+    async function handleSubmit(e) {
+        e.preventDefault();
+        
+        if (!validateOtpFormat(otpInput.value)) {
+            showNotification("Invalid Format", "Please enter a 6-digit code", "error");
+            return;
+        }
+
+        setLoadingState(true);
+        
+        try {
+            const response = await fetch(otpForm.action, {
+                method: 'POST',
+                body: new FormData(otpForm),
+                credentials: 'include'
+            });
+
+            const data = await processResponse(response);
+
+            if (data.valid) {
+                handleSuccess(data.redirect_url);
+            } else {
+                handleErrorResponse(data);
+            }
+        } catch (error) {
+            handleNetworkError(error);
+        } finally {
+            setLoadingState(false);
+        }
+    }
+
+    async function processResponse(response) {
+        if (response.redirected) {
+            window.location.href = response.url;
+            return;
+        }
+
+        const data = await response.json();
+        
+        if (!response.ok) {
+            // Handle HTTP errors (4xx, 5xx)
+            throw new Error(data.message || `Server error: ${response.status}`);
+        }
+        
+        return data;
+    }
+
+    function handleErrorResponse(data) {
+        // Map server error codes to user-friendly messages
+        const errorMessages = {
+            'invalid_otp': "The OTP code you entered is incorrect",
+            'expired_otp': "This OTP has expired. Please request a new one",
+            'account_locked': "Account temporarily locked due to too many attempts",
+            'invalid_request': "Invalid verification request"
+        };
+
+        const userMessage = errorMessages[data.error_code] || data.message || "Verification failed";
+        
+        if (data.error_code === 'account_locked') {
+            startAccountLockout();
+        } else {
+            failedAttempts++;
+            if (failedAttempts >= MAX_ATTEMPTS) {
+                startAccountLockout();
+            }
+        }
+
+        showNotification("Verification Failed", userMessage, "error");
+    }
+
+    // ======================
+    // LOCKOUT SYSTEM
+    // ======================
+
+    function initLockoutDisplay() {
+        lockoutDisplay.className = 'lockout-display';
+        otpForm.insertBefore(lockoutDisplay, otpForm.firstChild);
+    }
+
+    function startAccountLockout() {
+        // Disable all inputs
+        otpInput.disabled = true;
+        verifyBtn.disabled = true;
+        resendBtn.disabled = true;
+        
+        // Start countdown
+        let remainingTime = LOCKOUT_DURATION;
+        updateLockoutDisplay(remainingTime);
+        
+        lockoutInterval = setInterval(() => {
+            remainingTime--;
+            updateLockoutDisplay(remainingTime);
+            
+            if (remainingTime <= 0) {
+                clearInterval(lockoutInterval);
+                resetAccountLock();
+            }
+        }, 1000);
+    }
+
+    function updateLockoutDisplay(seconds) {
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        lockoutDisplay.innerHTML = `
+            <div class="lockout-message">
+                <i class="fas fa-lock"></i>
+                <strong>Account Locked</strong>
+                <p>Too many failed attempts. Please try again in ${mins}:${secs < 10 ? '0' : ''}${secs}</p>
+            </div>
+        `;
+    }
+
+    function resetAccountLock() {
+        // Enable inputs
+        otpInput.disabled = false;
+        verifyBtn.disabled = false;
+        
+        // Reset state
+        failedAttempts = 0;
+        lockoutDisplay.innerHTML = '';
+        
+        showNotification("Account Unlocked", "You may now try again", "success");
+        resetCooldown();
+    }
+
+    // ======================
+    // NOTIFICATION SYSTEM
+    // ======================
+
+    function showNotification(title, message, type) {
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        
+        toast.innerHTML = `
+            <div class="toast-header">
+                <strong>${title}</strong>
+                <button class="toast-close">&times;</button>
+            </div>
+            <div class="toast-body">${message}</div>
+        `;
+
+        const closeBtn = toast.querySelector('.toast-close');
+        closeBtn.addEventListener('click', () => toast.remove());
+
+        const container = document.getElementById('toast-container');
+        container.appendChild(toast);
+
+        // Auto-dismiss after 5 seconds
+        setTimeout(() => {
+            toast.classList.add('fade-out');
+            setTimeout(() => toast.remove(), 300);
+        }, 5000);
+    }
+
+    // ======================
+    // UTILITY FUNCTIONS
+    // ======================
+
+    function setLoadingState(loading) {
+        verifyBtn.disabled = loading;
+        verifyBtn.innerHTML = loading 
+            ? '<i class="fas fa-spinner fa-spin"></i> Verifying...' 
+            : 'Verify';
+    }
+
+    function validateOtpFormat(otp) {
+        return /^\d{6}$/.test(otp);
+    }
+
+    function handleNetworkError(error) {
+        console.error("Network error:", error);
+        showNotification(
+            "Connection Error", 
+            "Couldn't connect to the server. Please check your internet connection.",
+            "error"
+        );
+    }
+
+    function handleSuccess(redirectUrl) {
+        showNotification("Success", "OTP verified successfully!", "success");
+        setTimeout(() => window.location.href = redirectUrl, 1500);
+    }
+
+    // ... (remaining cooldown and resend functions from previous example)
+});

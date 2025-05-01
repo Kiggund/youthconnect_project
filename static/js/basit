@@ -1,0 +1,102 @@
+document.addEventListener('DOMContentLoaded', function() {
+    const resendBtn = document.getElementById('resend-otp-btn');
+    const otpInput = document.getElementById('otp');
+    const otpForm = document.getElementById('otp-form');
+    const notificationArea = document.createElement('div');
+    notificationArea.className = 'notification-area';
+    otpForm.parentNode.insertBefore(notificationArea, otpForm.nextSibling);
+
+    let resendCooldown = 0;
+    let cooldownInterval = null;
+
+    // Format seconds to MM:SS
+    function formatTime(seconds) {
+        return `${Math.floor(seconds / 60)}:${seconds % 60 < 10 ? '0' : ''}${seconds % 60}`;
+    }
+
+    // Show notification to user
+    function showNotification(message, isError = false) {
+        const notification = document.createElement('div');
+        notification.className = `alert alert-${isError ? 'danger' : 'success'} mt-3`;
+        notification.innerHTML = `
+            <i class="fas ${isError ? 'fa-exclamation-triangle' : 'fa-check-circle'}"></i>
+            ${message}
+        `;
+        notificationArea.appendChild(notification);
+        
+        // Auto-remove after 5 seconds
+        setTimeout(() => {
+            notification.remove();
+        }, 5000);
+    }
+
+    // Update button state during cooldown
+    function updateResendButton() {
+        if (resendCooldown > 0) {
+            resendBtn.innerHTML = `Resend OTP (${formatTime(resendCooldown)})`;
+            resendBtn.disabled = true;
+            resendCooldown--;
+        } else {
+            clearInterval(cooldownInterval);
+            resendBtn.innerHTML = 'Resend OTP';
+            resendBtn.disabled = false;
+        }
+    }
+
+    // Handle Resend OTP Button Click
+    resendBtn.addEventListener('click', function() {
+        // Start cooldown (60 seconds)
+        resendCooldown = 60;
+        updateResendButton();
+        cooldownInterval = setInterval(updateResendButton, 1000);
+
+        // Get email from template
+        const email = "{{ email|escapejs }}";
+        
+        // Show loading state
+        const originalText = resendBtn.innerHTML;
+        resendBtn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Sending...`;
+        
+        fetch(`/join/resend-otp/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `email=${encodeURIComponent(email)}`
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                showNotification('New OTP has been sent to your email!');
+            } else {
+                throw new Error(data.error || 'Failed to resend OTP');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showNotification(error.message || 'Failed to resend OTP. Please try again.', true);
+            // Reset cooldown on error
+            clearInterval(cooldownInterval);
+            resendCooldown = 0;
+            updateResendButton();
+        })
+        .finally(() => {
+            resendBtn.innerHTML = originalText;
+        });
+    });
+
+    // Auto-submit OTP form when 6 digits are entered
+    if (otpInput && otpForm) {
+        otpInput.addEventListener('input', function() {
+            if (this.value.length === 6) {
+                otpForm.submit();
+            }
+        });
+    }
+});

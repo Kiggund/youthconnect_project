@@ -1,13 +1,18 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block styles %}
+<link href="{% static 'css/success.css' %}" rel="stylesheet">
+{% endblock %}
 
 {% block title %}Success!{% endblock %}
 
-<a href="{% url 'join:index' %}" class="btn btn-primary">Return Home</a>
+<a href="{% url 'join:register' %}" class="btn btn-primary">Return Home</a>
 
 {% block content %}
 <div class="alert alert-success">
     <h4>Registration Successful!</h4>
     <p>Thank you for joining YouthConnect.</p>
-    <a href="{% url 'join:index' %}" class="btn btn-outline-primary">Home</a>
+    <a href="{% url 'join:register' %}" class="btn btn-outline-primary">Home</a>
 </div>
 {% endblock %}

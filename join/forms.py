@@ -5,6 +5,7 @@ class MemberForm(forms.ModelForm):
     class Meta:
         model = Member
         fields = '__all__'
+        exclude = ['otp_attempts']
         widgets = {
             'dob': forms.DateInput(attrs={'type': 'date'}),
             'current_address': forms.Textarea(attrs={'rows': 3}),

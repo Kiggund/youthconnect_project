@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block styles %}
+<link href="{% static 'css/verification.css' %}" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="container otp-container">
+    <div class="card otp-card">
+        <div class="card-header otp-header">
+            <h2>Verify Your Email</h2>
+        </div>
+        <div class="card-body otp-body">
+            {% if notification %}
+            <div class="alert alert-{{ notification.type }} mt-3" role="alert">
+                <i class="fas fa-info-circle"></i>
+                {{ notification.message }}
+            </div>
+            {% endif %}
+
+            {% if error %}
+            <div class="alert alert-danger mt-3 shake" role="alert">
+                <i class="fas fa-exclamation-triangle"></i>
+                <strong>Error:</strong> {{ error }}
+            </div>
+            {% endif %}
+
+            <p class="lead otp-lead">We've sent a 6-digit verification code to <strong class="text-primary">{{ email }}</strong>.</p>
+
+            <form action="{% url 'join:verify_otp' email=email %}" method="post" class="otp-form" id="otp-form">
+                {% csrf_token %}
+                <div class="form-group otp-input-group">
+                    <label for="otp">Verification Code</label>
+                    <input type="text"
+                           id="otp"
+                           name="otp"
+                           class="form-control otp-input"
+                           placeholder="Enter 6-digit code"
+                           pattern="\d{6}"
+                           maxlength="6"
+                           required
+                           autocomplete="one-time-code"
+                           autofocus>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block otp-btn">Verify Account</button>
+            </form>
+
+            <div class="otp-resend mt-3">
+                <p class="otp-resend-text">Didn't receive the code?</p>
+                <button id="resend-otp-btn" class="btn btn-secondary" disabled>
+                    Resend OTP <span id="cooldown-timer"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block scripts %}
+{{ block.super }}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="{% static 'js/verify_otp.js' %}"></script>
+{% endblock %}
+{% endblock %}

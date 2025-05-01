@@ -27,8 +27,19 @@ SECRET_KEY = 'django-insecure-17(1nahjvix@1sj!ily)l^fqt03wd(3jaur@kht5bk^%@a@s(g
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+# Required for ngrok HTTPS
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+CSRF_TRUSTED_ORIGINS = ['https://*.ngrok-free.app']
 
+ALLOWED_HOSTS = [
+    'ngrok-free-app',
+    'localhost',
+    '127.0.0.1'
+]
+
+ # For testing file uploads/media
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Application definition
 
@@ -59,6 +70,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'youthconnect.middleware.SkipNgrokWarningMiddleware',
 ]
 
 ROOT_URLCONF = 'youthconnect.urls'
@@ -131,6 +143,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 

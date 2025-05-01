@@ -1,28 +1,21 @@
 """
 URL configuration for youthconnect project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.2/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.views.generic import RedirectView
 from . import views
 from paypal.standard.ipn.views import ipn
+from django.conf import settings
+from django.conf.urls.static import static
 
-print("Views imported successfully!")
 urlpatterns = [
+    # Root URL redirect (new addition)
+    path('', RedirectView.as_view(url='/homepage/'), name='root_redirect'),
+    
+    # Existing URLs
     path('admin/', admin.site.urls),
-    path('leaders/', include('leaders.urls')),  # Include app-specific URLs
+    path('leaders/', include('leaders.urls')),
     path('homepage/', include('homepage.urls')),
     path('news_events/', include('news_events.urls')),
     path('resources/', include('resources.urls')),
@@ -34,8 +27,7 @@ urlpatterns = [
     path('paypal-ipn/', ipn, name='paypal-ipn'),
 ]
 
-from django.conf import settings
-from django.conf.urls.static import static
-
+# Static and media files in development
 if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
