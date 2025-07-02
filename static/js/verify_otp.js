@@ -3,20 +3,21 @@ document.addEventListener('DOMContentLoaded', function() {
     const resendBtn = document.getElementById('resend-otp-btn');
     const cooldownTimer = document.getElementById('cooldown-timer');
     const otpForm = document.getElementById('otp-form');
-    const otpInput = document.getElementById('otp-input');
-    const verifyBtn = otpForm.querySelector('button[type="submit"]');
-    const lockoutTimer = document.createElement('div'); // For lockout countdown
+    const otpInput = document.getElementById('otp-code');
+    const verifyBtn = document.getElementById('verify-btn');
+    const lockoutTimer = document.createElement('div');
+    lockoutTimer.className = 'lockout-timer';
 
     // State Management
     let cooldownInterval;
     let lockoutInterval;
     let failedAttempts = 0;
-    const MAX_ATTEMPTS = 3;
+    const MAX_ATTEMPTS = window.OTP_CONFIG?.maxAttempts || 3;
     const LOCKOUT_DURATION = 300; // 5 minutes in seconds
     let remainingLockoutTime = LOCKOUT_DURATION;
 
     // Initialize
-    initLockoutTimerUI();
+    otpForm.appendChild(lockoutTimer);
     startCooldown();
 
     // Event Listeners
@@ -29,19 +30,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function handleSubmit(e) {
         e.preventDefault();
-        
+
         if (!validateOtpFormat(otpInput.value)) {
             showToast("Please enter a valid 6-digit code", "error");
             return;
         }
 
         setLoadingState(true);
-        
+
         try {
             const response = await fetch(otpForm.action, {
                 method: 'POST',
                 body: new FormData(otpForm),
-                credentials: 'include'
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': window.OTP_CONFIG.csrfToken
+                },
+                credentials: 'same-origin'
             });
 
             if (response.redirected) {
@@ -51,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             const data = await response.json();
             if (data.valid) {
-                handleSuccess(data.redirect_url);
+                handleSuccess(data.redirect);
             } else {
                 handleFailedAttempt(data.message);
             }
@@ -64,17 +69,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function handleResendOtp() {
         if (resendBtn.disabled) return;
-        
+
         setResendLoadingState(true);
-        
+
         try {
             const response = await fetch(window.OTP_CONFIG.resendUrl, {
                 method: 'POST',
                 headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
                     'X-CSRFToken': window.OTP_CONFIG.csrfToken,
-                    'Content-Type': 'application/json'
+                    'X-Requested-With': 'XMLHttpRequest'
                 },
-                credentials: 'include'
+                body: `email=${encodeURIComponent(window.OTP_CONFIG.email)}`,
+                credentials: 'same-origin'
             });
 
             const data = await response.json();
@@ -93,29 +100,26 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // ======================
-    // LOCKOUT SYSTEM
+    // SECURITY FUNCTIONS
     // ======================
 
     function handleFailedAttempt(errorMessage) {
         failedAttempts++;
         showToast(errorMessage || "Invalid OTP code", "error");
-        
+
         if (failedAttempts >= MAX_ATTEMPTS) {
             startAccountLockout();
         }
     }
 
     function startAccountLockout() {
-        // Disable all inputs
         otpInput.disabled = true;
         verifyBtn.disabled = true;
         resendBtn.disabled = true;
-        
-        // Show lockout message
+
         const lockoutMessage = `Account locked. Please wait ${formatTime(LOCKOUT_DURATION)}.`;
         showToast(lockoutMessage, "error", LOCKOUT_DURATION * 1000);
-        
-        // Start countdown
+
         remainingLockoutTime = LOCKOUT_DURATION;
         updateLockoutTimer();
         lockoutInterval = setInterval(updateLockoutTimer, 1000);
@@ -123,11 +127,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function updateLockoutTimer() {
         remainingLockoutTime--;
-        
-        // Update UI
         lockoutTimer.textContent = `Unlocks in: ${formatTime(remainingLockoutTime)}`;
-        
-        // Check if lockout expired
+
         if (remainingLockoutTime <= 0) {
             clearInterval(lockoutInterval);
             resetAccountLock();
@@ -135,25 +136,13 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function resetAccountLock() {
-        // Enable inputs
         otpInput.disabled = false;
         verifyBtn.disabled = false;
-        
-        // Reset state
         failedAttempts = 0;
         remainingLockoutTime = LOCKOUT_DURATION;
-        
-        // Update UI
         lockoutTimer.textContent = '';
         showToast("Account unlocked. You may try again.", "success");
-        
-        // Restart cooldown
         resetCooldown();
-    }
-
-    function initLockoutTimerUI() {
-        lockoutTimer.className = 'lockout-timer';
-        otpForm.appendChild(lockoutTimer);
     }
 
     // ======================
@@ -167,7 +156,7 @@ document.addEventListener('DOMContentLoaded', function() {
         cooldownInterval = setInterval(() => {
             seconds--;
             updateCooldownUI(seconds);
-            
+
             if (seconds <= 0) {
                 clearInterval(cooldownInterval);
                 enableResendButton();
@@ -180,16 +169,6 @@ document.addEventListener('DOMContentLoaded', function() {
         startCooldown();
     }
 
-    // ======================
-    // UI HELPERS
-    // ======================
-
-    function formatTime(seconds) {
-        const mins = Math.floor(seconds / 60);
-        const secs = seconds % 60;
-        return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-    }
-
     function updateCooldownUI(seconds) {
         cooldownTimer.textContent = `(${seconds}s)`;
         resendBtn.disabled = true;
@@ -200,17 +179,23 @@ document.addEventListener('DOMContentLoaded', function() {
         cooldownTimer.textContent = '';
     }
 
+    // ======================
+    // UI HELPERS
+    // ======================
+
     function setLoadingState(loading) {
+        const btnText = verifyBtn.querySelector('.btn-text');
+        const spinner = verifyBtn.querySelector('.spinner');
+        
         verifyBtn.disabled = loading;
-        verifyBtn.innerHTML = loading 
-            ? '<i class="fas fa-spinner fa-spin"></i> Verifying...' 
-            : 'Verify';
+        btnText.classList.toggle('hidden', loading);
+        spinner.classList.toggle('hidden', !loading);
     }
 
     function setResendLoadingState(loading) {
         resendBtn.disabled = loading;
         resendBtn.innerHTML = loading
-            ? '<i class="fas fa-spinner fa-spin"></i> Sending...'
+            ? '<span class="spinner" aria-hidden="true"></span> Sending...'
             : 'Resend OTP';
     }
 
@@ -218,13 +203,20 @@ document.addEventListener('DOMContentLoaded', function() {
         const toast = document.createElement('div');
         toast.className = `toast toast-${type}`;
         toast.textContent = message;
-        
+        toast.setAttribute('role', 'alert');
+
         document.getElementById('toast-container').appendChild(toast);
-        
+
         setTimeout(() => {
             toast.classList.add('fade-out');
             setTimeout(() => toast.remove(), 300);
         }, duration);
+    }
+
+    function formatTime(seconds) {
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
     }
 
     function validateOtpFormat(otp) {
@@ -237,7 +229,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function handleError(message) {
-        console.error(message);
+        console.error('OTP Error:', message);
         showToast(message, "error");
     }
 

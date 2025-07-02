@@ -1,8 +1,8 @@
-{% load static %}
+{% load static %}  
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    {% load static %} 
+    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Youth Connect{% endblock %}</title>
@@ -14,43 +14,63 @@
    {% block styles %}{% endblock %}
 </head>
 <body>
-    <!--Header section-->
+    <!-- Header Section -->
     <header class="header">
-    <div class="logo">
-        <img src="{% static 'images/youth-connect.png' %}" alt="Youth Con-nect Logo">
-    </div>
-    <div class="title">
-        <h1>Youth Con-nect</h1>
-    </div>
-   <!-- <div class="hamburger">-->
+        <div class="logo">
+            <img src="{% static 'images/youth-connect.png' %}" alt="Youth Con-nect Logo">
+        </div>
+        <div class="title">
+            <h1>Youth Con-nect</h1>
+        </div>
         <div class="bar"></div>
         <div class="bar"></div>
         <div class="bar"></div>
-    </div>
-</header>
+    </header>
+
     <!-- Navigation Bar -->
     <nav>
         <div class="hamburger" onclick="toggleMenu()">☰</div>
         <ul class="nav-links" id="navlinks">
             <li><a href="/homepage/">Home</a></li>
             <li><a href="/leaders/">Leaders</a></li>
-            <li><a href="/resources/">programs & initiatives</a></li>
+            <li><a href="/resources/">Programs & Initiatives</a></li>
             <li><a href="/news_events/">News & Events</a></li>
             <li><a href="/about/">About Us</a></li>
             <li><a href="/join/">Join Us</a></li>
             <li><a href="/contact/">Contact Us</a></li>
+            {% if not request.user.is_authenticated %}
+            <li class="nav-login-cta">
+              <a href="{% url 'join:login' %}" class="pulse-link">
+                <i class="fa fa-sign-in-alt"></i> Login
+              </a>
+            </li>
+            {% endif %}
+
+            {% if request.user.is_authenticated %}
+            <li class="nav-user-info">
+                {% if request.user.profile.profile_pic %}
+                    <img src="{{ request.user.profile.profile_pic.url }}" alt="Profile Picture" width="40px">
+                {% else %}
+                    <img src="{% static 'images/default.jpg' %}" alt="Default Profile Picture" width="40px">
+                {% endif %}
+               <!-- <span>Welcome, {{ request.user.username }}</span>-->
+               <a href="{% url 'profile' %}" class="profile-link">Welcome, {{ request.user.username }}</a>
+            </li>
+            {% endif %}
         </ul>
     </nav>
+
     {% if not hide_registration_link %}
     <li class="nav-item">
         <a class="nav-link" href="{% url 'join:register' %}">Register</a>
     </li>
     {% endif %}
+
     <!-- Hero Section -->
     <header>
         <img src="{% static 'images/group2.jpg' %}" alt="Youth Connect Hero Banner" style="width:100%; height:auto;">
         <div id="animated-text"></div>
-        <p>Empowering youth for a brighter future.<strong>united we stand, divided we fall</strong></p>
+        <p>Empowering youth for a brighter future. <strong>United we stand, divided we fall</strong></p>
     </header>
 
     <!-- Main Content Area -->
@@ -63,11 +83,10 @@
     <!-- Footer Section -->
     <footer>
         <p>© 2025 Youth Connect. All rights reserved.</p>
-       <!--<img id="logo" src="{% static 'images/youth-connect.png' %}" alt="Youth Connect Logo" style="height:50px; width:auto;"> -->
-    <div id="logo-container">
-    	<img id="logo" src="{% static 'images/youth-connect.png' %}" alt="Youth Connect Logo" style="height:50px; width:auto;">
-    	<div id="logo-text">United we stand, Divided we fall!</div>
-    </div>
+        <div id="logo-container">
+            <img id="logo" src="{% static 'images/youth-connect.png' %}" alt="Youth Connect Logo" style="height:50px; width:auto;">
+            <div id="logo-text">United we stand, Divided we fall!</div>
+        </div>
     </footer>
 </body>
 </html>

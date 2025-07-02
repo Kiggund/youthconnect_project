@@ -476,3 +476,142 @@ body {
         width: 90%; /* Relative width for smaller screens */
     }
 }
+
+.nav-user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 5px 15px;
+    background-color: #f8f9fa; /* Light background */
+    border-radius: 10px;
+}
+
+.nav-user-info img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%; /* Circular profile picture */
+    border: 2px solid #4CAF50; /* Green border */
+}
+
+.nav-user-info span {
+    font-weight: bold;
+    color: #333; /* Darker text for better readability */
+}
+
+.logout-btn {
+    background-color: #ff4444;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+
+.logout-btn:hover {
+    background-color: #cc0000;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(1.07);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+}
+
+.nav-login-cta a {
+  background: linear-gradient(to right, #2e7dff, #6c9dff);
+  color: white;
+  font-weight: bold;
+  padding: 12px 18px;
+  margin: 10px 0;
+  border-radius: 10px;
+  text-align: center;
+  display: block;
+  box-shadow: 0 4px 12px rgba(0, 102, 255, 0.25);
+  transition: transform 0.25s ease-in-out;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.nav-login-cta a:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(0, 102, 255, 0.4);
+}
+
+.nav-login-cta a i {
+  margin-right: 8px;
+}
+
+/* Pulse animation */
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 0.9; }
+  50% { transform: scale(1.08); opacity: 1; }
+  100% { transform: scale(1); opacity: 0.9; }
+}
+
+/* Navigation container (you can name it .navbar or .nav-container) */
+/* Default: mobile-first */
+.nav-links,
+.nav-login-cta {
+  display: none;
+}
+
+.hamburger {
+  display: block;
+}
+
+/* Desktop styles */
+@media (min-width: 769px) {
+  .nav-links {
+    display: flex;
+    gap: 30px;
+    list-style: none;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+  }
+
+  .nav-links li a {
+    text-decoration: none;
+    font-weight: 600;
+    color: #222;
+    position: relative;
+    transition: color 0.3s ease;
+  }
+
+  .nav-links li a::after {
+    content: "";
+    position: absolute;
+    width: 0%;
+    height: 2px;
+    bottom: -4px;
+    left: 0;
+    background-color: #2e7dff;
+    transition: width 0.3s ease;
+  }
+
+  .nav-links li a:hover::after {
+    width: 100%;
+  }
+
+  .nav-links li a:hover {
+    color: #2e7dff;
+  }
+
+  .nav-login-cta {
+    display: block;
+    margin-left: auto;
+  }
+
+  .hamburger {
+    display: none;
+  }
+}

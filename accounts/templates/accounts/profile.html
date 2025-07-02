@@ -1,0 +1,79 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">                 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile</title>
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <header class="profile-header">
+        <img src="{{ request.user.profile.profile_pic.url }}?v={{ user.profile.updated_at.timestamp }}" alt="Profile Picture" class="profile-pic">
+        <h1>Welcome, {{ request.user.profile.full_name }}</h1>
+        <button id="theme-toggle" title="Toggle dark mode">
+            <i class="fas fa-moon"></i>
+        </button>
+    </header>
+
+    <div class="profile-container">
+
+        <div class="section-title">
+            <i class="fas fa-user icon"></i>
+            Personal Information
+        </div>
+        <p><strong>Email:</strong> {{ request.user.email }}</p>
+        <p><strong>Phone Number:</strong> {{ request.user.profile.phone_number }}</p>
+        <p><strong>NIN:</strong> <span class="badge">{{ request.user.profile.nin_number }}</span></p>
+        <p><strong>Gender:</strong> {{ request.user.profile.gender }}</p>
+        <p><strong>Age:</strong> {{ request.user.profile.age }}</p>
+        <p><strong>Marital Status:</strong> {{ request.user.profile.marital_status }}</p>
+        <p><strong>Date of Birth:</strong> {{ request.user.profile.dob }}</p>
+        <p><strong>Place of Birth:</strong> {{ request.user.profile.place_of_birth }}</p>
+        <p><strong>Current Address:</strong> {{ request.user.profile.current_address }}</p>
+
+        <div class="section-title">
+            <i class="fas fa-briefcase icon"></i>
+            Professional Information
+        </div>
+        <p><strong>Profession:</strong> {{ request.user.profile.profession }}</p>
+        <p><strong>Place of Work:</strong> {{ request.user.profile.place_of_work }}</p>
+
+        <div class="section-title">
+            <i class="fas fa-heart icon"></i>
+            Next of Kin Details
+        </div>
+        <p><strong>Name:</strong> {{ request.user.profile.next_of_kin_name }}</p>
+        <p><strong>Email:</strong> {{ request.user.profile.next_of_kin_email }}</p>
+        <p><strong>Phone:</strong> {{ request.user.profile.next_of_kin_phone }}</p>
+        <p><strong>Profession:</strong> {{ request.user.profile.next_of_kin_professional }}</p>
+
+        <div class="section-title">
+            <i class="fas fa-clock icon"></i>
+            Joined On
+        </div>
+        <p><strong>Time Joined:</strong> {{ request.user.profile.time_joined }}</p>
+
+        <div class="profile-actions">
+            <a href="{% url 'edit_account' %}" class="edit-btn">
+                <i class="fas fa-pen"></i> Edit Account
+            </a>
+            <form action="{% url 'logout' %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </form>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>© 2025 Youth Connect. All rights reserved.</p>
+    </footer>
+
+    <script src="{% static 'js/profile.js' %}"></script>
+</body>
+</html>

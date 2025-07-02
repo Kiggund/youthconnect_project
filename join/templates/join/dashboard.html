@@ -1,0 +1,15 @@
+{% extends "base.html" %}  <!-- Extend from a base template if you have one -->
+
+{% block content %}
+<div class="container">
+    <h2>Welcome, {{ user.username }}!</h2>
+    <p>Your profile details:</p>
+    <ul>
+        <li><strong>Name:</strong> {{ profile.name }}</li>
+        <li><strong>Email:</strong> {{ user.email }}</li>
+        <li><strong>Joined:</strong> {{ user.date_joined|date:"Y-m-d" }}</li>
+    </ul>
+
+    <a href="{% url 'join:logout' %}" class="btn btn-danger">Logout</a>
+</div>
+{% endblock %}

@@ -2,10 +2,11 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from django.core.exceptions import ValidationError
 from django.views.decorators.csrf import csrf_exempt
-from contact.models import ContactMessage  # Updated import
-from join.forms import MemberForm
+from contact.models import ContactMessage 
+from join.forms import UserRegistrationForm, UserLoginForm
 import re
 import dns.resolver
+import shutil
 
 # Email validation
 def is_valid_email(email):
@@ -75,3 +76,79 @@ def index(request):
 
 def contact(request):
     return render(request, 'join/contact.html')
+
+# youthconnect/views.py
+from django.contrib.auth import authenticate, login
+from django.shortcuts import render, redirect
+from django.views.decorators.http import require_http_methods
+from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.cache import never_cache
+
+@never_cache
+@csrf_protect
+@require_http_methods(["GET", "POST"])
+def login_view(request):
+    """Custom login view"""
+    if request.user.is_authenticated:
+        return redirect('dashboard')  # Update with your actual dashboard URL name
+    
+    if request.method == "POST":
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        
+        if user is not None:
+            login(request, user)
+            return redirect('dashboard')  # Update with your actual dashboard URL name
+        else:
+            return render(request, 'login.html', {'error': 'Invalid credentials'})
+    
+    return render(request, 'join/login.html')
+
+# views.py
+from django.contrib.auth.views import PasswordResetDoneView
+from django.contrib.auth.forms import PasswordResetForm
+
+class CustomPasswordResetDoneView(PasswordResetDoneView):
+    template_name = 'registration/password_reset_done.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Get email from session
+        context['email'] = self.request.session.get('password_reset_email', 'your@email.com')
+        return context
+
+class CustomPasswordResetForm(PasswordResetForm):
+    def save(self, request, **kwargs):
+        # Store email in session
+        request.session['password_reset_email'] = self.cleaned_data['email']
+        return super().save(request, **kwargs)
+
+from django.contrib.auth.views import PasswordResetDoneView
+from django.contrib.auth.forms import PasswordResetForm
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+
+class CustomPasswordResetForm(PasswordResetForm):
+    def save(self, request, **kwargs):
+        email = self.cleaned_data["email"]
+        request.session['reset_email'] = email  # Store email in session
+        return super().save(
+            request=request,
+            use_https=request.is_secure(),
+            token_generator=default_token_generator,
+            from_email=None,
+            email_template_name='registration/password_reset_email.html',
+            subject_template_name='registration/password_reset_subject.txt',
+            html_email_template_name=None,
+            extra_email_context=None
+        )
+
+class CustomPasswordResetDoneView(PasswordResetDoneView):
+    template_name = 'registration/password_reset_done.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['email'] = self.request.session.get('reset_email', 'your@email.com')
+        return context

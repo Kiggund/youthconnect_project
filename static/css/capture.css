@@ -1,0 +1,62 @@
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  padding: 20px;
+  margin: 0;
+  background: #f0f2f5;
+}
+
+h2 {
+  margin-bottom: 16px;
+  color: #333;
+}
+
+.camera-container {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  max-width: 500px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #000;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+video, canvas {
+  width: 100%;
+  height: auto;
+  display: block;
+  border: none;
+  border-radius: 8px;
+}
+
+.frame-guide {
+  position: absolute;
+  width: 280px;
+  height: 170px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 3px dashed limegreen;
+  box-shadow: 0 0 12px rgba(0, 255, 0, 0.3);
+  z-index: 10;
+  pointer-events: none;
+  transition: border-color 0.3s ease-in-out;
+}
+
+button {
+  margin-top: 18px;
+  padding: 10px 22px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}

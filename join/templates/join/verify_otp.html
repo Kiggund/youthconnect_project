@@ -1,48 +1,69 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verify OTP</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/verification.css' %}">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' cdnjs.cloudflare.com; img-src 'self' data:">
+    <title>Secure OTP Verification</title>
+    <link rel="stylesheet" href="{% static 'css/verification.css' %}?v={% now 'U' %}">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" crossorigin="anonymous">
 </head>
 <body>
     <div class="otp-container">
         <div class="otp-card">
-            <h2 class="otp-header">Verify Your Email</h2>
-            <div id="notification-area"></div>
-            <p class="otp-lead">Enter the 6-digit code sent to <strong>{{ email }}</strong>.</p>
-            
-            <form id="otp-form" method="POST" action="{% url 'join:verify_otp' email=email %}">
+            <h1 class="otp-header">Secure Verification</h1>
+            <div id="notification-area" aria-live="polite"></div>
+            <p class="otp-lead">Enter the 6-digit code sent to <span class="email-display">{{ request.session.otp_email|escape }}</span></p>
+
+            <form id="otp-form" method="POST" action="{% url 'join:verify_otp' %}" novalidate>
                 {% csrf_token %}
-                <input type="text" id="otp-input" class="otp-input" name="otp" placeholder="Enter OTP" maxlength="6" required>
-                <button type="submit" class="otp-btn">Verify</button>
+                <input type="hidden" name="email" value="{{ request.session.otp_email|escape }}">
+                <input type="hidden" name="session_identifier" value="{{ request.session.session_key|escape }}">
+
+                <div class="otp-input-group">
+                    <label for="otp-code" class="sr-only">Verification Code</label>
+                    <input type="text"
+                           id="otp-code"
+                           name="otp"
+                           class="otp-input"
+                           pattern="\d{6}"
+                           inputmode="numeric"
+                           maxlength="6"
+                           autocomplete="one-time-code"
+                           required
+                           aria-required="true">
+                    <button type="submit" class="otp-btn" id="verify-btn">
+                        <span class="btn-text">Verify</span>
+                        <span class="spinner hidden" aria-hidden="true"></span>
+                    </button>
+                </div>
             </form>
-            
+
             <div class="otp-resend">
                 <p class="text-muted">Didn't receive the code?</p>
-                <button id="resend-otp-btn" class="otp-btn-resend" disabled>
-                    Resend OTP <span id="cooldown-timer"></span>
+                <button id="resend-otp-btn" class="otp-btn-resend" disabled aria-disabled="true">
+                    Resend OTP <span id="cooldown-timer" aria-live="polite">(30s)</span>
                 </button>
             </div>
         </div>
     </div>
 
-    <div id="toast-container" class="toast-container"></div>
+    <div id="toast-container" class="toast-container" role="alert" aria-live="assertive"></div>
 
-    <!-- Configuration Object -->
-    <script>
-        window.OTP_CONFIG = {
-            email: "{{ email|escapejs }}",
+    <script nonce="{{ request.csp_nonce|default:'staticnonce' }}">
+        window.OTP_CONFIG = Object.freeze({
+            email: "{{ request.session.otp_email|escapejs }}",
             csrfToken: "{{ csrf_token }}",
-            resendUrl: "{% url 'join:resend_otp' email='EMAIL_PLACEHOLDER' %}"
-                .replace('EMAIL_PLACEHOLDER', encodeURIComponent("{{ email|escapejs }}")),
-            cooldownDuration: 30 // seconds
-        };
+            verifyUrl: "{% url 'join:verify_otp' %}",
+            resendUrl: "{% url 'join:resend_otp' %}",
+            cooldownDuration: {% firstof settings.OTP_CONFIG.RESEND_COOLDOWN 30 %},
+            maxAttempts: {% firstof settings.OTP_CONFIG.MAX_ATTEMPTS 3 %}
+        });
     </script>
 
-    <script src="{% static 'js/verify_otp.js' %}?v={% now 'U' %}"></script>
+    <!-- Simplified script loading without filehash -->
+    <script src="{% static 'js/verify_otp.js' %}?v={% now 'U' %}" defer></script>
 </body>
 </html>

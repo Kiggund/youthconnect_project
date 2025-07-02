@@ -3,57 +3,279 @@
 
 {% block styles %}
 <link href="{% static 'css/join.css' %}" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 {% endblock %}
 
-{% block title %}Join{% endblock %}
+{% block title %}Join Youth Connect{% endblock %}
 
 {% block content %}
+<div class="form-container">
+    <h1>Youth Connect Registration</h1>
+    <p class="form-intro">Welcome! Please fill in all required fields to create your account.</p>
 
-<div class="notification-container" aria-live="polite"></div>
+    <form method="POST" class="registration-form" enctype="multipart/form-data">
+        {% csrf_token %}
 
-<h1>Join Us</h1>
-<p>Welcome to the join page! Please fill out the form below to get started:</p>
+        <!-- Top Level Error Messages (excluding NIN errors) -->
+        {% if form.errors and not form.errors.nin_number %}
+        <div class="form-errors">
+            <h3><i class="fas fa-exclamation-triangle"></i> Please correct these errors:</h3>
+            <ul>
+                {% for field, errors in form.errors.items %}
+                    {% for error in errors %}
+                        {% if field != 'nin_number' %}
+                        <li>{{ field|title }}: {{ error }}</li>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
 
-<form method="POST" action="{% url 'register' %}" class="registration-form" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}    
-    <h2>Personal Information</h2>
-    {{ form.full_name }}
-    {{ form.nin_number }}
-    {{ form.gender }}
-    {{ form.age }}
-    {{ form.marital_status }}
-    {{ form.dob }}
-    {{ form.place_of_birth }}
-    {{ form.current_address }}
-    {{ form.email }}
-    {{ form.signature }}
-    
-    <h2>Professional Information</h2>
-    {{ form.professional }}
-    {{ form.place_of_work }}
-    
-    <h2>Next of Kin</h2>
-    {{ form.next_of_kin_name }}
-    {{ form.next_of_kin_email }}
-    {{ form.next_of_kin_phone }}
-    {{ form.next_of_kin_professional }}
-    
-    <button type="submit">Sign Up</button>
-</form>
+        <!-- Personal Information Section -->
+        <div class="form-section">
+            <h2><i class="fas fa-user"></i> Personal Information</h2>
+            <div class="form-grid">
+                <!-- Username Field -->
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required
+                           placeholder="Choose a username">
+                </div>
 
-{% if form.errors %}
-    <div class="errors">
-        {% for field, errors in form.errors.items %}
-            {% for error in errors %}
-                <p>{{ field|title }}: {{ error }}</p>
-            {% endfor %}
-        {% endfor %}
-    </div>
-{% endif %}
+                <!-- Full Name Field -->
+                <div class="form-group">
+                    <label for="full_name">Full Name</label>
+                    <input type="text" id="full_name" name="full_name" required
+                           placeholder="Enter your full name">
+                </div>
+
+                <!-- NIN Number Field with Error Handling -->
+                <div class="form-group">
+                    <label for="nin_number">NIN Number</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="nin_number" name="nin_number"
+                               class="{% if form.errors.nin_number %}error-field{% endif %}"
+                               pattern="[A-Za-z0-9]{14}" 
+                               title="14-character alphanumeric NIN"
+                               placeholder="14-digit National ID" 
+                               required
+                               aria-describedby="nin-error">
+                        <i class="fas fa-id-card input-icon"></i>
+                    </div>
+                    
+                    <!-- NIN Error Message -->
+                    {% if form.errors.nin_number %}
+                    <div class="error-message" id="nin-error">
+                        <i class="fas fa-exclamation-circle"></i>
+                        This NIN is already registered.
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Gender Field -->
+                <div class="form-group">
+                    <label for="gender">Gender</label>
+                    <select id="gender" name="gender" required>
+                        <option value="">Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                
+                <!-- Inside the Personal Information section -->
+                <div class="form-group">
+                  <label for="id_front">Your National ID – Front</label>
+                  <button type="button" onclick="window.location.href='{% url 'join:capture_id_front' %}'">
+                    Open Camera to Capture Front
+                  </button>
+                  <input type="file" name="id_front" id="id_front" hidden required>
+                  <img id="preview_id_front" style="display:none; max-width: 120px; margin-top: 5px;" />
+                </div>
+
+                <div class="form-group">
+                 <label for="id_back">Your National ID – Back</label>
+                 <button type="button" onclick="window.location.href='{% url 'join:capture_id_back' %}'">
+                   Open Camera to Capture Back
+                 </button>
+                 <input type="file" name="id_back" id="id_back" hidden required>
+                 <img id="preview_id_back" style="display:none; max-width: 120px; margin-top: 5px;" />
+                </div>
+       
+                <!-- Marital Status Field -->
+                <div class="form-group">
+                    <label for="marital_status">Marital Status</label>
+                    <select id="marital_status" name="marital_status" required>
+                        <option value="">Select Status</option>
+                        <option value="single">Single</option>
+                        <option value="married">Married</option>
+                        <option value="divorced">Divorced</option>
+                    </select>
+                </div>
+
+                <!-- Date of Birth Field -->
+                <div class="form-group">
+                    <label for="dob">Date of Birth</label>
+                    <input type="date" id="dob" name="dob" required>
+                </div>
+
+                <!-- Place of Birth Field -->
+                <div class="form-group">
+                    <label for="place_of_birth">Place of Birth</label>
+                    <input type="text" id="place_of_birth" name="place_of_birth" required
+                           placeholder="City, Country">
+                </div>
+
+                <!-- Current Address Field -->
+                <div class="form-group full-width">
+                    <label for="current_address">Current Address</label>
+                    <textarea id="current_address" name="current_address"
+                              rows="3" required></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Account Security Section -->
+        <div class="form-section">
+            <h2><i class="fas fa-lock"></i> Account Security</h2>
+            <div class="form-grid">
+                <!-- Email Field -->
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" required
+                           placeholder="example@domain.com">
+                </div>
+
+                <!-- Password Field -->
+                <div class="form-group">
+                    <label for="password1">Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="password1" name="password1"
+                               minlength="8" required
+                               placeholder="At least 8 characters">
+                        <button type="button" class="toggle-password">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Confirm Password Field -->
+                <div class="form-group">
+                    <label for="password2">Confirm Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="password2"
+                               name="password2" required
+                               placeholder="Re-enter your password">
+                        <button type="button" class="toggle-password">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Professional Information Section -->
+        <div class="form-section">
+            <h2><i class="fas fa-briefcase"></i> Professional Information</h2>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="profession">Profession</label>
+                    <input type="text" id="profession" name="profession" required
+                           placeholder="Your occupation">
+                </div>
+
+                <div class="form-group">
+                    <label for="place_of_work">Place of Work</label>
+                    <input type="text" id="place_of_work" name="place_of_work" required
+                           placeholder="Company/organization name">
+                </div>
+            </div>
+        </div>
+
+        <!-- Next of Kin Section -->
+        <div class="form-section">
+            <h2><i class="fas fa-users"></i> Next of Kin</h2>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="next_of_kin_name">Full Name</label>
+                    <input type="text" id="next_of_kin_name" name="next_of_kin_name" required
+                           placeholder="Kin's full name">
+                </div>
+
+                <div class="form-group">
+                    <label for="next_of_kin_email">Email</label>
+                    <input type="email" id="next_of_kin_email" name="next_of_kin_email" required
+                           placeholder="Kin's email address">
+                </div>
+
+                <div class="form-group">
+                    <label for="next_of_kin_phone">Phone Number</label>
+                    <input type="tel" id="next_of_kin_phone" name="next_of_kin_phone"
+                           pattern="[0-9]{10,15}" required
+                           placeholder="Kin's phone number">
+                </div>
+
+                <div class="form-group">
+                    <label for="next_of_kin_professional">Profession</label>
+                    <input type="text" id="next_of_kin_professional"
+                           name="next_of_kin_professional" required
+                           placeholder="Kin's profession">
+                </div>
+                <!-- At the end of the Next of Kin section -->
+                <div class="form-group">
+                  <label for="id_front">Next Of Kin ID – Front</label>
+                  <button type="button" onclick="window.location.href='{% url 'join:capture_id_front' %}'">
+                    Open Camera to Capture Front
+                  </button>
+                  <input type="file" name="id_front" id="id_front" hidden required>
+                  <img id="preview_id_front" style="display:none; max-width: 120px; margin-top: 5px;" />
+                </div>
+
+                <div class="form-group">
+                  <label for="id_back">Next Of Kin ID – Back</label>
+                  <button type="button" onclick="window.location.href='{% url 'join:capture_id_back' %}'">
+                    Open Camera to Capture Back
+                  </button>
+                  <input type="file" name="id_back" id="id_back" hidden required>
+                  <img id="preview_id_back" style="display:none; max-width: 120px; margin-top: 5px;" />
+                </div>
+
+        <!-- Signature Field -->
+        <div class="form-section">
+            <div class="form-group">
+                <label for="signature">Signature</label>
+                <div class="signature-pad">
+                    <canvas id="signatureCanvas"></canvas>
+                    <button type="button" class="clear-signature">Clear</button>
+                    <input type="hidden" id="signature" name="signature">
+                </div>
+            </div>
+        </div>
+
+        <div class="terms-box">
+            <input type="checkbox" id="agree" name="agree" required>
+            <label for="agree" class="terms-label">
+                <span class="label-text">By completing registration, you confirm that you have read and agree to our</span>
+            </label>
+            <div class="terms-links">
+                <a href="{% url 'terms_conditions' %}" target="_blank">Terms & Conditions</a> and 
+                <a href="{% url 'privacy_policy' %}" target="_blank">Privacy Policy</a>.
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="form-submit">
+            <button type="submit" class="submit-btn">
+                <i class="fas fa-user-plus"></i> Complete Registration
+            </button>
+        </div>
+    </form>
+</div>
 
 {% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
 <script src="{% static 'js/join.js' %}"></script>
 {% endblock %}
-
 {% endblock %}

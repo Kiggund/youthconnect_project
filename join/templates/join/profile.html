@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block styles %}
+<link href="{% static 'css/profile.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block title %}Edit Profile{% endblock %}
+
+{% block content %}
+
+<div class="notification-container" aria-live="polite"></div>
+
+<h1>Edit Your Profile</h1>
+<p>Update your information below and click save.</p>
+
+<form method="POST" action="{% url 'join:edit_profile' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <!-- Display Error Messages -->
+    {% if form.errors %}
+        <div class="errors">
+            <h3>Please correct the following errors:</h3>
+            {% for field, errors in form.errors.items %}
+                {% for error in errors %}
+                    <p><strong>{{ field|title }}</strong>: {{ error }}</p>
+                {% endfor %}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <label>Full Name</label>
+    <input type="text" name="full_name" value="{{ form.instance.full_name }}" required>
+
+    <label>Email</label>
+    <input type="email" name="email" value="{{ form.instance.email }}" required>
+
+    <label>Profile Picture</label>
+    <input type="file" name="profile_picture">
+    {% if form.instance.profile_picture %}
+        <p>Current Picture:</p>
+        <img src="{{ form.instance.profile_picture.url }}" alt="Profile Picture" width="100">
+    {% endif %}
+
+    <button type="submit">Save Changes</button>
+</form>
+
+{% block scripts %}
+<script src="{% static 'js/profile.js' %}"></script>
+{% endblock %}
+
+{% endblock %}

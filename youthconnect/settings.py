@@ -16,8 +16,8 @@ import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-
+SITE_NAME = "youthconnect"
+SITE_URL = 'http://127.0.0.1:8000/'  # url for development change in prdction
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
@@ -29,7 +29,7 @@ DEBUG = True
 
 # Required for ngrok HTTPS
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-CSRF_TRUSTED_ORIGINS = ['https://*.ngrok-free.app']
+CSRF_TRUSTED_ORIGINS = ["https://*.ngrok-free.app"]
 
 ALLOWED_HOSTS = [
     'ngrok-free-app',
@@ -37,9 +37,9 @@ ALLOWED_HOSTS = [
     '127.0.0.1'
 ]
 
- # For testing file uploads/media
+# For testing file uploads/media
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = '/storage/emulated/0/youthconnect_project/media/'
 
 # Application definition
 
@@ -57,8 +57,11 @@ INSTALLED_APPS = [
     'join',
     'news_events',
     'resources',
+    'accounts.apps.AccountsConfig',
     'youthconnect',
     'payments',
+    'privacy_policy',
+    'legal',
     'paypal.standard.ipn',
 ]
 
@@ -131,8 +134,6 @@ LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'Africa/Kampala'
 
-TIME_ZONE = 'UTC'
-
 USE_I18N = True
 
 USE_TZ = True
@@ -149,8 +150,8 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+#MEDIA_ROOT = "/data/data/com.termux/files/home/media/"
+#MEDIA_URL = "/media/"
 
 # PayPal Configuration
 PAYPAL_RECEIVER_EMAIL = "your-paypal-business-email@example.com"
@@ -169,22 +170,142 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')  # Your Gmail email address
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')  # Your new App Password
+DEFAULT_FROM_EMAIL = 'abdulbasitkiggundu@gmail.com'  # Must match EMAIL_HOST_USER
+SERVER_EMAIL = 'abdulbasitkiggundu@gmail.com'  # For error notifications
 
-#Error log files for debugging
-"""LOGGING = {
+# Admin notifications
+ADMINS = [('Your Name', 'abdulbasitkiggundu@gmail.com')]
+
+# Only enable in production (optional but recommended)
+if not DEBUG:
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# ======================
+# SECURITY ENHANCEMENTS
+# ======================
+
+SECURE_CROSS_ORIGIN_OPENER_POLICY = 'same-origin-allow-popups'
+
+# OTP Configuration
+OTP_CONFIG = {
+    'TIMEOUT': 300,  # 5 minutes
+    'RESEND_COOLDOWN': 3,  # seconds
+    'MAX_ATTEMPTS': 3,
+    'LENGTH': 6,
+    'LOCKOUT_DURATION': 5, # 30mins lock duratio 
+}
+
+# Cache configuration for OTP storage
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'otp-verification',
+    },
+    'otp': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'otp-storage',
+        'TIMEOUT': OTP_CONFIG['TIMEOUT'],
+    }
+}
+
+# Security Headers
+if not DEBUG:
+    SECURE_HSTS_SECONDS = 31536000  # 1 year
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_BROWSER_XSS_FILTER = True
+X_FRAME_OPTIONS = 'DENY'
+SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
+
+# Session Security
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'Lax'
+SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+SESSION_COOKIE_AGE = 86400  # 24 hours
+
+# CSRF Protection
+CSRF_COOKIE_HTTPONLY = True
+CSRF_FAILURE_VIEW = 'join.views.csrf_failure'
+
+# Email Configuration (Update your existing email config)
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_TIMEOUT = 10  # seconds
+DEFAULT_FROM_EMAIL = config('EMAIL_HOST_USER')
+
+# Password Validation (Enhance your existing validators)
+AUTH_PASSWORD_VALIDATORS.extend([
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'OPTIONS': {
+            'user_attributes': ('email', 'first_name', 'last_name'),
+            'max_similarity': 0.7,
+        }
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 10,
+        }
+    },
+])
+
+# Logging Configuration
+# Ensure logs directory exists
+LOG_DIR = os.path.join(BASE_DIR, 'logs')
+os.makedirs(LOG_DIR, exist_ok=True)
+LOGGING = {
     'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+    },
     'handlers': {
-        'file': {
-            'level': 'DEBUG',
+        'otp_file': {
+            'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': BASE_DIR / 'debug.log',
+            'filename': BASE_DIR / 'logs/otp.log',
+            'formatter': 'verbose',
+        },
+        'security_file': {
+            'level': 'WARNING',
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR / 'logs/security.log',
+            'formatter': 'verbose',
         },
     },
     'loggers': {
-        'django': {
-            'handlers': ['file'],
-            'level': 'DEBUG',
+        'otp': {
+            'handlers': ['otp_file'],
+            'level': 'INFO',
             'propagate': True,
         },
+        'django.security': {
+            'handlers': ['security_file'],
+            'level': 'WARNING',
+            'propagate': False,
+        },
     },
-}"""
+}
+
+# Rate Limiting
+RATELIMIT_ENABLE = True
+
+# Disables file locking in development only
+FILE_UPLOAD_TEMP_DIR = None
+FILE_UPLOAD_HANDLERS = [
+    "django.core.files.uploadhandler.MemoryFileUploadHandler",
+    "django.core.files.uploadhandler.TemporaryFileUploadHandler",
+]
+# REDIRECT TO LOGIN PAGE AFTER LOGOUT
+LOGOUT_REDIRECT_URL = 'login'
+
+# REDIRECT TO HOMEPAGE AFTER LOGING IN
+LOGIN_REDIRECT_URL = '/homepage/'

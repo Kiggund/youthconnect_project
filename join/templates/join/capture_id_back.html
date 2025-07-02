@@ -1,0 +1,22 @@
+{% load static  %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Capture ID - Back</title>
+  <link rel="stylesheet" href="{% static 'css/capture.css' %}">
+</head>
+<body>
+  <h2>Step 2: Capture Back of ID</h2>
+  <div class="camera-container">
+    <video id="video" autoplay muted></video>
+    <canvas id="canvas" style="display: none;"></canvas>
+    <div id="overlay" class="frame-guide"></div>
+    <button id="captureBtn" disabled>Capture Back</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
+  <script src="{% static 'js/capture_back.js' %}"></script>
+</body>
+</html>
